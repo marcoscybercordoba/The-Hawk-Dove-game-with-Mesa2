@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100px;
+  height: 15px;
+  border-radius: 5px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+</style>
+
+<title></title>
+
+</head>
+<body>
+
+<form method="get" action="/realizaVariasSimulacionesCalculaEstadisticos">
+{% module xsrf_form_html() %} 
+
+<div class="slidecontainer">
+
+<p>
+Distancia dentro de la cual se consideran que son vecinos
+<br>
+<input type="range" min="1" max="20" value="{{distaciaVecinos}}" class="slider" id="distaciaVecinos" name="distaciaVecinos">
+<span id="distaciaVecinosSpan">
+</span>
+</p>
+
+<p>
+Cantidad inicial de halcones
+<br>
+<input type="range" min="0" max="10" value="{{cantidadSiempreEscala}}" class="slider" id="cantidadSiempreEscala" name="cantidadSiempreEscala">
+<span id="cantidadSiempreEscalaSpan">
+</span>
+</p>
+
+<p>
+Cantidad inicial de paradojicos
+<br>
+<input type="range" min="0" max="10" value="{{cantidadNuncaEscala}}" class="slider" id="cantidadNuncaEscala" name="cantidadNuncaEscala">
+<span id="cantidadNuncaEscalaSpan">
+</span>
+</p>
+
+
+<p>
+Cantidad inicial de palomas
+<br>
+<input type="range" min="0" max="10" value="{{cantidadEscalaSiElOtroEsMasGrande}}" class="slider" id="cantidadEscalaSiElOtroEsMasGrande" name="cantidadEscalaSiElOtroEsMasGrande">
+<span id="cantidadEscalaSiElOtroEsMasGrandeSpan">
+</span>
+</p>
+
+<p>
+Valor de un recurso
+<br>
+<input type="range" min="0" max="10" value="{{ValorDelRecurso}}" class="slider" id="ValorDelRecurso" name="ValorDelRecurso">
+<span id="ValorDelRecursoSpan">
+</span>
+</p>
+
+<p>
+Costo de una lesion
+<br>
+<input type="range" min="0" max="10" value="{{CostoDeLesion}}" class="slider" id="CostoDeLesion" name="CostoDeLesion">
+<span id="CostoDeLesionSpan">
+</span>
+</p>
+
+<p>
+Probabilidad de que el mayor gane
+<br>
+<input type="range" min="0" max="100" value="{{ProbabilidadDeQueElMayorGane}}" class="slider" id="ProbabilidadDeQueElMayorGane" name="ProbabilidadDeQueElMayorGane">
+<span id="ProbabilidadDeQueElMayorGaneSpan">
+</span>
+</p>
+
+
+<p>
+Edad en que se produce la reproduccion y mueren
+<br>
+<input type="range" min="0" max="1000" value="{{EdadDeReproduccion}}" class="slider" id="EdadDeReproduccion" name="EdadDeReproduccion">
+<span id="EdadDeReproduccionSpan">
+</span>
+</p>
+
+
+<p>
+Cantidad de simulaciones a realizar
+<br>
+<input type="range" min="0" max="50" value="{{CantidadDeSimulaciones}}" class="slider" id="CantidadDeSimulaciones" name="CantidadDeSimulaciones">
+<span id="CantidadDeSimulacionesSpan">
+</span>
+</p>
+
+<p>
+Cantidad de pasos dados en cada una de las simulaciones
+<br>
+<input type="range" min="0" max="1000" value="{{CantidadDePasos}}" class="slider" id="CantidadDePasos" name="CantidadDePasos">
+<span id="CantidadDePasosSpan">
+</span>
+</p>
+
+
+</div>
+
+
+<input type="submit">
+</form>
+
+
+
+<script>
+
+
+var distaciaVecinosVar = document.getElementById("distaciaVecinos");
+var distaciaVecinosOutput = document.getElementById("distaciaVecinosSpan");
+distaciaVecinosOutput.innerHTML = distaciaVecinosVar.value;
+
+distaciaVecinosVar.oninput = function() {
+  distaciaVecinosOutput.innerHTML = this.value;
+}
+
+
+var cantidadSiempreEscalaslider = document.getElementById("cantidadSiempreEscala");
+var cantidadSiempreEscalaoutput = document.getElementById("cantidadSiempreEscalaSpan");
+cantidadSiempreEscalaoutput.innerHTML = cantidadSiempreEscalaslider.value;
+
+cantidadSiempreEscalaslider.oninput = function() {
+  cantidadSiempreEscalaoutput.innerHTML = this.value;
+}
+
+
+var cantidadNuncaEscalaslider = document.getElementById("cantidadNuncaEscala");
+var cantidadNuncaEscalaoutput = document.getElementById("cantidadNuncaEscalaSpan");
+cantidadNuncaEscalaoutput.innerHTML = cantidadNuncaEscalaslider.value;
+
+cantidadNuncaEscalaslider.oninput = function() {
+  cantidadNuncaEscalaoutput.innerHTML = this.value;
+}
+
+
+var cantidadEscalaSiElOtroEsMasGrandeslider = document.getElementById("cantidadEscalaSiElOtroEsMasGrande");
+var cantidadEscalaSiElOtroEsMasGrandeoutput = document.getElementById("cantidadEscalaSiElOtroEsMasGrandeSpan");
+cantidadEscalaSiElOtroEsMasGrandeoutput.innerHTML = cantidadEscalaSiElOtroEsMasGrandeslider.value;
+
+cantidadEscalaSiElOtroEsMasGrandeslider.oninput = function() {
+  cantidadEscalaSiElOtroEsMasGrandeoutput.innerHTML = this.value;
+}
+
+
+var ValorDelRecursoslider = document.getElementById("ValorDelRecurso");
+var ValorDelRecursooutput = document.getElementById("ValorDelRecursoSpan");
+ValorDelRecursooutput.innerHTML = ValorDelRecursoslider.value;
+
+ValorDelRecursoslider.oninput = function() {
+  ValorDelRecursooutput.innerHTML = this.value;
+}
+
+
+var CostoDeLesionslider = document.getElementById("CostoDeLesion");
+var CostoDeLesionoutput = document.getElementById("CostoDeLesionSpan");
+CostoDeLesionoutput.innerHTML = CostoDeLesionslider.value;
+
+CostoDeLesionslider.oninput = function() {
+  CostoDeLesionoutput.innerHTML = this.value;
+}
+
+
+var ProbabilidadDeQueElMayorGaneslider = document.getElementById("ProbabilidadDeQueElMayorGane");
+var ProbabilidadDeQueElMayorGaneoutput = document.getElementById("ProbabilidadDeQueElMayorGaneSpan");
+ProbabilidadDeQueElMayorGaneoutput.innerHTML = ProbabilidadDeQueElMayorGaneslider.value;
+
+ProbabilidadDeQueElMayorGaneslider.oninput = function() {
+  ProbabilidadDeQueElMayorGaneoutput.innerHTML = this.value;
+}
+
+
+
+
+var EdadDeReproduccionslider = document.getElementById("EdadDeReproduccion");
+var EdadDeReproduccionoutput = document.getElementById("EdadDeReproduccionSpan");
+EdadDeReproduccionoutput.innerHTML = EdadDeReproduccionslider.value;
+
+EdadDeReproduccionslider.oninput = function() {
+  EdadDeReproduccionoutput.innerHTML = this.value;
+}
+
+
+
+var CantidadDeSimulacionesslider = document.getElementById("CantidadDeSimulaciones");
+var CantidadDeSimulacionesoutput = document.getElementById("CantidadDeSimulacionesSpan");
+CantidadDeSimulacionesoutput.innerHTML = CantidadDeSimulacionesslider.value;
+
+CantidadDeSimulacionesslider.oninput = function() {
+  CantidadDeSimulacionesoutput.innerHTML = this.value;
+}
+
+
+var CantidadDePasosslider = document.getElementById("CantidadDePasos");
+var CantidadDePasosoutput = document.getElementById("CantidadDePasosSpan");
+CantidadDePasosoutput.innerHTML = CantidadDePasosslider.value;
+
+CantidadDePasosslider.oninput = function() {
+  CantidadDePasosoutput.innerHTML = this.value;
+}
+
+
+
+</script>
+
+<br>
+<br>
+{{porcentajesStr2}}
+
+
+	</body>
+</html>
