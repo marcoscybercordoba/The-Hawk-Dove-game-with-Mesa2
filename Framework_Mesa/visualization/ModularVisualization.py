@@ -205,9 +205,9 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		ValorDelRecurso = 1
 		CostoDeLesion = 0
 		ProbabilidadDeQueElMayorGane = 50
-		EdadDeReproduccion = 1000
+		EdadDeReproduccion = 5
 		cantidadDeSimulaciones = 2
-		cantidadDePasos = 1000
+		cantidadDePasos = 30
 
 		if self.get_argument('distaciaVecinos', None) != None:
 			distaciaVecinos = int(self.get_argument('distaciaVecinos', None))
@@ -253,7 +253,6 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		distanciaMaximaVecinos = distaciaVecinos 
 		cantidadDeHalcones = cantidadSiempreEscala
 		cantidadDeParadojicos = cantidadEscalaSiElOtroEsMasGrande
-		cantidadDeSentidoComun = 2
 		cantidadDePalomas = cantidadNuncaEscala
 		valorDelRecurso = ValorDelRecurso
 		costeDeLesion = CostoDeLesion
@@ -267,87 +266,84 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		listaDePorcentajes2 = []
 		porcentajesStr = ""
 
-		porcentajeDeHalconesGrandeMedia = 0
-		porcentajeDeHalconesChicoMedia = 0
-		porcentajeDePalomasGrandeMedia = 0
-		porcentajeDePalomasChicoMedia = 0
-		porcentajeDeParadojicosGrandeMedia = 0
-		porcentajeDeParadojicosChicoMedia = 0
+		cantidadDeHalconesGrandeMedia = 0
+		cantidadDeHalconesChicoMedia = 0
+		cantidadDePalomasGrandeMedia = 0
+		cantidadDePalomasChicoMedia = 0
+		cantidadDeParadojicosGrandeMedia = 0
+		cantidadDeParadojicosChicoMedia = 0
 
-		cantidadDeSimulaciones = 2
 		for i in range(int(cantidadDeSimulaciones)):
 
+			porcentajesStr = porcentajesStr + "(" + str(alto)  + "," + str(ancho)  + "," + str(distanciaMaximaVecinos)  + "," + str(cantidadDeHalcones)  + "," + str(cantidadDeParadojicos)  + "," + str(cantidadDePalomas)  + "," + str(valorDelRecurso)  + "," + str(costeDeLesion)  + "," + str(probabilidadDeQueElMayorGane1)  + "," + str(edadDeReproduccion)  + ")<br>"
+
 			ambiente = Ambiente( 
-				20,
-				20,
-				20, 
-				2,
-				0,
-				0,
-				1,
-				0,
-				50,
-				5
-				)
+				alto,
+				ancho,
+				distanciaMaximaVecinos, 
+				cantidadDeHalcones,
+				cantidadDeParadojicos,
+				cantidadDePalomas,
+				valorDelRecurso,
+				costeDeLesion,
+				probabilidadDeQueElMayorGane1,
+				edadDeReproduccion
+				)	
 
 		
 			porcentajesStr = porcentajesStr + "<b>Simulacion: "+ str(i+1) + "</b><br>"
-			porcentajesStr = porcentajesStr + "<br><i>paso (HalconesGrande, HalconesChico, PalomasGrande, PalomasChico, ParadojicosGrande, ParadojicosChico)</i>"
+			porcentajesStr = porcentajesStr + "<br><table><tr><i><td>Paso </td><td>(HalconesGrande,</td><td> HalconesChico, </td><td>PalomasGrande, </td><td>PalomasChico, </td><td>ParadojicosGrande, </td><td>ParadojicosChico)</td><td></i></tr>"
 		
-			cantidadDePasos = 30
 			for j in range(int(cantidadDePasos)):
 				ambiente.step()
 
-				porcentajeDeHalconesGrande = ambiente.schedule.cantidadDeJugadores("siempreEscala", "grande")
-				porcentajeDeHalconesChico = ambiente.schedule.cantidadDeJugadores("siempreEscala", "chico")
-				porcentajeDePalomasGrande = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "grande")
-				porcentajeDePalomasChico = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "chico")
-				porcentajeDeParadojicosGrande = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "grande")
-				porcentajeDeParadojicosChico = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "chico")
-		
-				#porcentajeDeHalconesGrande = ambiente.schedule.porcentajeDeJugadores("siempreEscala", "grande")
-				#porcentajeDeHalconesChico = ambiente.schedule.porcentajeDeJugadores("siempreEscala", "chico")
-				#porcentajeDePalomasGrande = ambiente.schedule.porcentajeDeJugadores("nuncaEscala", "grande")
-				#porcentajeDePalomasChico = ambiente.schedule.porcentajeDeJugadores("nuncaEscala", "chico")
-				#porcentajeDeParadojicosGrande = ambiente.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasGrande", "grande")
-				#porcentajeDeParadojicosChico = ambiente.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasGrande", "chico")
-		
+				cantidadDeHalconesGrande = ambiente.schedule.cantidadDeJugadores("siempreEscala", "grande")
+				cantidadDeHalconesChico = ambiente.schedule.cantidadDeJugadores("siempreEscala", "chico")
+				cantidadDePalomasGrande = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "grande")
+				cantidadDePalomasChico = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "chico")
+				cantidadDeParadojicosGrande = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "grande")
+				cantidadDeParadojicosChico = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "chico")
 		
 				porcentajes =	(
-						porcentajeDeHalconesGrande, 
-						porcentajeDeHalconesChico,
-						porcentajeDePalomasGrande,
-						porcentajeDePalomasChico,
-						porcentajeDeParadojicosGrande,
-						porcentajeDeParadojicosChico
+						cantidadDeHalconesGrande, 
+						cantidadDeHalconesChico,
+						cantidadDePalomasGrande,
+						cantidadDePalomasChico,
+						cantidadDeParadojicosGrande,
+						cantidadDeParadojicosChico
 						)
-				porcentajesStr = porcentajesStr + "<br><i>  "+ str(j + 1) + ": </i>("+str(porcentajeDeHalconesGrande)+","+str(porcentajeDeHalconesChico)+","+str(porcentajeDePalomasGrande)+","+str(porcentajeDePalomasChico)+","+str(porcentajeDeParadojicosGrande)+","+str(porcentajeDeParadojicosChico)+")"
-				#porcentajesStr = "("+str(porcentajeDeHalconesGrande)+","+str(porcentajeDeHalconesChico)+","+str(porcentajeDePalomasGrande)+","+str(porcentajeDePalomasChico)+","+str(porcentajeDeParadojicosGrande)+","+str(porcentajeDeParadojicosChico)+")"
+				porcentajesStr = porcentajesStr + "<tr><td><br><i>  "+ str(j + 1) + ": </i></td><td>("+str(cantidadDeHalconesGrande)+"</td><td>"+str(cantidadDeHalconesChico)+"</td><td>"+str(cantidadDePalomasGrande)+"</td><td>"+str(cantidadDePalomasChico)+"</td><td>"+str(cantidadDeParadojicosGrande)+"</td><td>"+str(cantidadDeParadojicosChico)+")</td></tr>"
+				#porcentajesStr = "("+str(cantidadDeHalconesGrande)+","+str(cantidadDeHalconesChico)+","+str(cantidadDePalomasGrande)+","+str(cantidadDePalomasChico)+","+str(cantidadDeParadojicosGrande)+","+str(cantidadDeParadojicosChico)+")"
 		
 				print(porcentajesStr)
 			
 				listaDePorcentajes1 = porcentajes
 				listaDePorcentajes2.append(porcentajes)
 
-			porcentajeDeHalconesGrandeMedia = porcentajeDeHalconesGrandeMedia + porcentajeDeHalconesGrande
-			porcentajeDeHalconesChicoMedia = porcentajeDeHalconesChicoMedia + porcentajeDeHalconesChico
-			porcentajeDePalomasGrandeMedia = porcentajeDePalomasGrandeMedia + porcentajeDePalomasGrande
-			porcentajeDePalomasChicoMedia = porcentajeDePalomasChicoMedia + porcentajeDePalomasChico
-			porcentajeDeParadojicosGrandeMedia = porcentajeDeParadojicosGrandeMedia + porcentajeDeParadojicosGrande
-			porcentajeDeParadojicosChicoMedia = porcentajeDeParadojicosChicoMedia + porcentajeDeParadojicosChico
+			porcentajesStr = porcentajesStr + "</table>"
+
+			cantidadDeHalconesGrandeMedia = cantidadDeHalconesGrandeMedia + cantidadDeHalconesGrande
+			cantidadDeHalconesChicoMedia = cantidadDeHalconesChicoMedia + cantidadDeHalconesChico
+			cantidadDePalomasGrandeMedia = cantidadDePalomasGrandeMedia + cantidadDePalomasGrande
+			cantidadDePalomasChicoMedia = cantidadDePalomasChicoMedia + cantidadDePalomasChico
+			cantidadDeParadojicosGrandeMedia = cantidadDeParadojicosGrandeMedia + cantidadDeParadojicosGrande
+			cantidadDeParadojicosChicoMedia = cantidadDeParadojicosChicoMedia + cantidadDeParadojicosChico
 
 			porcentajesStr = porcentajesStr + "<br><br><br>"
 
-		porcentajeDeHalconesGrandeMedia = porcentajeDeHalconesGrandeMedia / cantidadDeSimulaciones
-		porcentajeDeHalconesChicoMedia = porcentajeDeHalconesChicoMedia / cantidadDeSimulaciones
-		porcentajeDePalomasGrandeMedia = porcentajeDePalomasGrandeMedia / cantidadDeSimulaciones
-		porcentajeDePalomasChicoMedia = porcentajeDePalomasChicoMedia / cantidadDeSimulaciones
-		porcentajeDeParadojicosGrandeMedia = porcentajeDeParadojicosGrandeMedia / cantidadDeSimulaciones
-		porcentajeDeParadojicosChicoMedia = porcentajeDeParadojicosChicoMedia / cantidadDeSimulaciones
+		cantidadDeHalconesGrandeMedia = cantidadDeHalconesGrandeMedia / cantidadDeSimulaciones
+		cantidadDeHalconesChicoMedia = cantidadDeHalconesChicoMedia / cantidadDeSimulaciones
+		cantidadDePalomasGrandeMedia = cantidadDePalomasGrandeMedia / cantidadDeSimulaciones
+		cantidadDePalomasChicoMedia = cantidadDePalomasChicoMedia / cantidadDeSimulaciones
+		cantidadDeParadojicosGrandeMedia = cantidadDeParadojicosGrandeMedia / cantidadDeSimulaciones
+		cantidadDeParadojicosChicoMedia = cantidadDeParadojicosChicoMedia / cantidadDeSimulaciones
 
 		porcentajesStr = porcentajesStr + "<br><br><br>"
-		porcentajesStr = porcentajesStr + "<b>Resumen</b><br>"
-		porcentajesStr = porcentajesStr + "(" + str(porcentajeDeHalconesGrandeMedia) + "," + str(porcentajeDeHalconesChicoMedia) + "," + str(porcentajeDePalomasGrandeMedia) + "," + str(porcentajeDePalomasChicoMedia) + "," + str(porcentajeDeParadojicosGrandeMedia) + "," + str(porcentajeDeParadojicosChicoMedia) + ")"
+
+		porcentajesStr = porcentajesStr + "<b>Cantidades medias de las "+ str(i+1) + " simulaciones</b><br>"
+		porcentajesStr = porcentajesStr + "<br><table><tr><i><td>-</td><td>(HalconesGrande,</td><td> HalconesChico, </td><td>PalomasGrande, </td><td>PalomasChico, </td><td>ParadojicosGrande, </td><td>ParadojicosChico)</td><td></i></tr>"
+
+		porcentajesStr = porcentajesStr + "<tr><td>-</td><td>(" + str(cantidadDeHalconesGrandeMedia) + ",</td><td>" + str(cantidadDeHalconesChicoMedia) + ",</td><td>" + str(cantidadDePalomasGrandeMedia) + ",</td><td>" + str(cantidadDePalomasChicoMedia) + ",</td><td>" + str(cantidadDeParadojicosGrandeMedia) + ",</td><td>" + str(cantidadDeParadojicosChicoMedia) + ")</td><td></table>"
 
 
 
