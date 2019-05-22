@@ -31,9 +31,12 @@ class Ambiente(Model):
 		alto = 20,
 		ancho = 20,
 		distanciaMaximaVecinos = 20, 
-		cantidadDeHalcones = 2,
-		cantidadDeParadojicos = 0,
-		cantidadDePalomas = 0,
+		cantidadDeHalconesChicos = 2,
+		cantidadDeHalconesGrandes = 2,
+		cantidadDeParadojicosChicos = 0,
+		cantidadDeParadojicosGrandes = 0,
+		cantidadDePalomasChicos = 0,
+		cantidadDePalomasGrandes = 0,
 		valorDelRecurso = 1,
 		costeDeLesion = 0,
 		probabilidadDeQueElMayorGane1 = 50, 
@@ -52,9 +55,12 @@ class Ambiente(Model):
 		self.ancho = ancho
 		
 		self.distanciaMaximaVecinos = distanciaMaximaVecinos
-		self.cantidadDeHalcones = cantidadDeHalcones
-		self.cantidadDePalomas = cantidadDePalomas
-		self.cantidadDeParadojicos = cantidadDeParadojicos
+		self.cantidadDeHalconesChicos = cantidadDeHalconesChicos
+		self.cantidadDeHalconesGrandes = cantidadDeHalconesGrandes
+		self.cantidadDePalomasChicos = cantidadDePalomasChicos
+		self.cantidadDePalomasGrandes = cantidadDePalomasGrandes
+		self.cantidadDeParadojicosChicos = cantidadDeParadojicosChicos
+		self.cantidadDeParadojicosGrandes = cantidadDeParadojicosGrandes
 
 		self.valorDelRecurso = valorDelRecurso
 		self.costeDeLesion = costeDeLesion
@@ -81,7 +87,7 @@ class Ambiente(Model):
 		self.probabilidadDeQueElMayorGane1 = probabilidadDeQueElMayorGane1 / 100.00
 		
 		i = 0
-		while i < self.cantidadDeHalcones:
+		while i < self.cantidadDeHalconesChicos:
 			
 			x = random.randrange(self.ancho)
 			y = random.randrange(self.alto)
@@ -90,10 +96,8 @@ class Ambiente(Model):
 			estrategia = "siempreEscala"
 			
 			localia = None
-			if i < round(self.cantidadDeHalcones/2):
-				asimetriaAparente = "grande"
-			else:
-				asimetriaAparente = "chico"
+			#asimetriaAparente = "grande"
+			asimetriaAparente = "chico"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			
@@ -103,7 +107,26 @@ class Ambiente(Model):
 			i = i + 1
 		    
 		i = 0
-		while i < self.cantidadDePalomas:
+		while i < self.cantidadDeHalconesGrandes:
+			
+			x = random.randrange(self.ancho)
+			y = random.randrange(self.alto)
+			
+			id = self.next_id()
+			estrategia = "siempreEscala"
+			
+			localia = None
+			asimetriaAparente = "grande"
+			pos = (x, y)
+			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
+			
+			self.grid.place_agent(jugador1, (x, y))
+			self.schedule.add(jugador1)
+			
+			i = i + 1
+
+		i = 0
+		while i < self.cantidadDePalomasChicos:
 			
 			x = random.randrange(self.ancho)
 			y = random.randrange(self.alto)
@@ -111,10 +134,43 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "nuncaEscala"
 			localia = None
-			if i < round(self.cantidadDePalomas/2):
-				asimetriaAparente = "grande"
-			else:
-				asimetriaAparente = "chico"
+			asimetriaAparente = "grande"
+			pos = (x, y)
+			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
+			self.grid.place_agent(jugador1, (x, y))
+			self.schedule.add(jugador1)
+			
+			i = i + 1
+
+		i = 0
+		while i < self.cantidadDePalomasGrandes:
+			
+			x = random.randrange(self.ancho)
+			y = random.randrange(self.alto)
+			
+			id = self.next_id()
+			estrategia = "nuncaEscala"
+			localia = None
+			#asimetriaAparente = "grande"
+			asimetriaAparente = "chico"
+			pos = (x, y)
+			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
+			self.grid.place_agent(jugador1, (x, y))
+			self.schedule.add(jugador1)
+			
+			i = i + 1
+
+			
+		i = 0
+		while i < self.cantidadDeParadojicosChicos:
+			
+			x = random.randrange(self.ancho)
+			y = random.randrange(self.alto)
+			
+			id = self.next_id()
+			estrategia = "escalaSiElOtroEsMasGrande"
+			localia = None
+			asimetriaAparente = "grande"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
@@ -123,7 +179,7 @@ class Ambiente(Model):
 			i = i + 1
 			
 		i = 0
-		while i < self.cantidadDeParadojicos:
+		while i < self.cantidadDeParadojicosGrandes:
 			
 			x = random.randrange(self.ancho)
 			y = random.randrange(self.alto)
@@ -131,17 +187,14 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "escalaSiElOtroEsMasGrande"
 			localia = None
-			if i < round(self.cantidadDeParadojicos/2):
-				asimetriaAparente = "grande"
-			else:
-				asimetriaAparente = "chico"
+			asimetriaAparente = "chico"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
 			self.schedule.add(jugador1)
 			
 			i = i + 1
-			
+
 		self.datacollector.collect(self)     
 		self.running = True
 	
@@ -174,6 +227,7 @@ class Ambiente(Model):
 
 		poblacion = self.schedule.cantidadDeJugadores0()
 
+		eliminoIndividiosAlternativos = True
 		k = 1
 		for agente in self.schedule.agents:
 			
@@ -207,15 +261,15 @@ class Ambiente(Model):
 
 			if agente.Edad() == self.edadDeReproduccion:
 
-				print("La poblacion actual es de " + str(poblacion))
-				if (poblacion <= 50):
-					print("El jugador que tiene la menor cantidad de puntos hace una copia de si  mismo, el jugador que tiene la mayor cantidad de puntos hace 2 copias de si mismo")
+				#print("La poblacion actual es de " + str(poblacion))
+				#if (poblacion <= 50):
+				#	print("El jugador que tiene la menor cantidad de puntos hace una copia de si  mismo, el jugador que tiene la mayor cantidad de puntos hace 2 copias de si mismo")
 				
-				if (poblacion > 50 and poblacion < 100):
-					print("El jugador que tiene la menor cantidad de puntos no hace ninguna copia de si mismo, el jugador que tiene la mayor cantidad de puntos hace 2 copias de si mismo")
+				#if (poblacion > 50 and poblacion < 100):
+				#	print("El jugador que tiene la menor cantidad de puntos no hace ninguna copia de si mismo, el jugador que tiene la mayor cantidad de puntos hace 2 copias de si mismo")
 				
-				if (poblacion > 50 and poblacion < 100):
-					print("El jugador que tiene la menor cantidad de puntos no hace ninguna copia de si mismo, el jugador que tiene la mayor cantidad de puntos hace 1 sola copias de si mismo")
+				#if (poblacion > 50 and poblacion < 100):
+				#	print("El jugador que tiene la menor cantidad de puntos no hace ninguna copia de si mismo, el jugador que tiene la mayor cantidad de puntos hace 1 sola copias de si mismo")
 
 				puntajeBruto = agente.TotalDePuntos()
 				if (not (puntajeMaximo - puntajeMinimo) == 0):
@@ -224,7 +278,7 @@ class Ambiente(Model):
 					puntajeRelativo = 0
 				
 				puntajePorcentual = round(puntajeRelativo * 100)
-				print("puntajePorcentual:"+str(puntajePorcentual))
+				#print("puntajePorcentual:"+str(puntajePorcentual))
 				
 				numeroDeCopias = 0
 				
@@ -234,26 +288,26 @@ class Ambiente(Model):
 					if puntajePorcentual >= 50: 
 						numeroDeCopias = 2
 
-					print("numeroDeCopias:"+str(numeroDeCopias))
+					#print("numeroDeCopias:"+str(numeroDeCopias))
 				
-				if (poblacion > 50 and poblacion < 100):
-					if puntajePorcentual < 33: 
-						numeroDeCopias = 0
-					if puntajePorcentual >= 33 and puntajePorcentual < 66: 
+				if (poblacion > 50 and poblacion < 200):
+					if puntajePorcentual >= 0 and puntajePorcentual < 60: 
 						numeroDeCopias = 1
-					if puntajePorcentual >= 66: 
+					if puntajePorcentual >= 60: 
 						numeroDeCopias = 2
 
 				
-				if (poblacion >= 100):
-					if puntajePorcentual < 50: 
+				if (poblacion >= 200):
+					if(eliminoIndividiosAlternativos == True):
 						numeroDeCopias = 0
-					if puntajePorcentual >= 50: 
+						eliminoIndividiosAlternativos = False
+					else:
 						numeroDeCopias = 1
+						eliminoIndividiosAlternativos = True
 				
 				posicionDelAgente = agente.pos
 				(p0, p1) = posicionDelAgente
-				print(" -El jugador "+ agente.Estrategia() + "-" + agente.AsimetriaAparente() + " localizado en (" + str(p0) + "," + str(p1) + ") " +" hizo " + str(numeroDeCopias) + " copias de si mismo y fueron puestos en:")
+				print("paso:" + str(self.paso) + " poblacion:" + str(poblacion) + " puntajePorcentual:" + str(puntajePorcentual) + " numeroDeCopias:" + str(numeroDeCopias) + " -El jugador "+ agente.Estrategia() + "-" + agente.AsimetriaAparente() + " localizado en (" + str(p0) + "," + str(p1) + ") " +" hizo " + str(numeroDeCopias) + " copias de si mismo y fueron puestos en:")
 				i = 0
 				while i < numeroDeCopias:
 					
@@ -267,10 +321,10 @@ class Ambiente(Model):
 					jugador1 = Jugadores(self.next_id(), posicionElejida, estrategia, asimetriaAparente, self)
 					self.grid.place_agent(jugador1, posicionElejida)
 					self.schedule.add(jugador1)
-					print("  posicion: (" + str(posCopX) + "," + str(posCopY) + ") ")
+					#print("  posicion: (" + str(posCopX) + "," + str(posCopY) + ") ")
 			
 					i = i + 1
-				print("")
+				#print("")
 				
 			if agente.Edad() > self.edadDeReproduccion - 1:
 				
@@ -289,8 +343,8 @@ class Ambiente(Model):
 				posicionElejida = random.choice(posicionesVecinas)
 				self.grid.move_agent(agente, posicionElejida)
 
-		print("Contiendas:")
-		print("-")
+		#print("Contiendas:")
+		#print("-")
 		i = 1
 		for agenteA in self.schedule.agents:
 			(p0, p1) = agenteA.pos
@@ -321,7 +375,7 @@ class Ambiente(Model):
 
 	def ResultadoDeUnEncuentreEntreDosIndividuos(self, agenteA, agenteB):
 
-		print("probabilidadDeQueElMayorGane1:"+str(self.probabilidadDeQueElMayorGane1))
+		#print("probabilidadDeQueElMayorGane1:"+str(self.probabilidadDeQueElMayorGane1))
 	
 		(posA0, posA1) = agenteA.pos
 		(posB0, posB1) = agenteB.pos
@@ -333,10 +387,11 @@ class Ambiente(Model):
 		puntosGanadosSinPelear = round((self.valorDelRecurso), 2)
 
 		probabilidadDeQueElMayorGane1 = self.probabilidadDeQueElMayorGane1
-		#(puntosPorGanarUnaPelea - costoDePerderUnaPelea-/2
 
-		puntosPorGanarUnaPelea = 1
-		costoDePerderUnaPelea = 0
+		#(puntosPorGanarUnaPelea - costoDePerderUnaPelea-/2
+		#puntosPorGanarUnaPelea = 1
+		#costoDePerderUnaPelea = 0
+
 		probabilidadDeQueElMayorGane1 = 0.5
 		
 		if agenteA.Estrategia() == "siempreEscala":
@@ -346,13 +401,27 @@ class Ambiente(Model):
 				agenteA.SumarPuntos(puntosGanadosSinPelear)
 				agenteB.SumarPuntos(sinPuntosPorRetirarse)
 		
-				print("- Resultado de contienda entre " + agenteA.Estrategia() + "-" + agenteA.AsimetriaAparente() + " localizada en (" + str(posA0) + "," + str(posA1) + ") contra " + agenteB.Estrategia()  + "-" +  agenteB.AsimetriaAparente() + " localizado en (" + str(posB0) + "," + str(posB1) + ")")
-				print("  - Al primer jugador le sumo " + str(puntosGanadosSinPelear) + " resultado un total de " + str(agenteA.TotalDePuntos()))
-				print("  - Al segundo jugador le sumo " + str(sinPuntosPorRetirarse) + " resultado un total de " + str(agenteB.TotalDePuntos()))
-				print("")
+				#print("- Resultado de contienda entre " + agenteA.Estrategia() + "-" + agenteA.AsimetriaAparente() + " localizada en (" + str(posA0) + "," + str(posA1) + ") contra " + agenteB.Estrategia()  + "-" +  agenteB.AsimetriaAparente() + " localizado en (" + str(posB0) + "," + str(posB1) + ")")
+				#print("  - Al primer jugador le sumo " + str(puntosGanadosSinPelear) + " resultado un total de " + str(agenteA.TotalDePuntos()))
+				#print("  - Al segundo jugador le sumo " + str(sinPuntosPorRetirarse) + " resultado un total de " + str(agenteB.TotalDePuntos()))
+				#print("")
 		
 			# agenteA:siempreEscala y agenteB:siempreEscala
 			if agenteB.Estrategia() == "siempreEscala":
+
+
+				# agenteA:siempreEscala y agenteB:siempreEscala
+				# agenteA:grande y agenteB:grande
+				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
+					pr = random.random()
+					if pr < probabilidadDeQueElMayorGane1:
+						agenteA.SumarPuntos(costoDePerderUnaPelea)
+						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
+
+					if pr >= self.probabilidadDeQueElMayorGane1:
+						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
+						agenteB.SumarPuntos(costoDePerderUnaPelea)
+
 
 				# agenteA:siempreEscala y agenteB:siempreEscala
 				# agenteA:chico y agenteB:chico
@@ -396,22 +465,11 @@ class Ambiente(Model):
 						agenteA.SumarPuntos(costoDePerderUnaPelea)
 						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
 
-				# agenteA:siempreEscala y agenteB:siempreEscala
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					pr = random.random()
-					if pr < probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-
-					if pr >= self.probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
 		
-				print("- Resultado de contienda entre " + agenteA.Estrategia() + "-" + agenteA.AsimetriaAparente() + " localizada en (" + str(posA0) + "," + str(posA1) + ") contra " + agenteB.Estrategia()  + "-" +  agenteB.AsimetriaAparente() + " localizado en (" + str(posB0) + "," + str(posB1) + ")")
-				print("  - Al primer jugador le sumo " + str(puntosPorGanarUnaPelea) + " resultado un total de " + str(agenteA.TotalDePuntos()))
-				print("  - Al segundo jugador le sumo " + str(costoDePerderUnaPelea) + " resultado un total de " + str(agenteB.TotalDePuntos()))
-				print("")
+				#print("- Resultado de contienda entre " + agenteA.Estrategia() + "-" + agenteA.AsimetriaAparente() + " localizada en (" + str(posA0) + "," + str(posA1) + ") contra " + agenteB.Estrategia()  + "-" +  agenteB.AsimetriaAparente() + " localizado en (" + str(posB0) + "," + str(posB1) + ")")
+				#print("  - Al primer jugador le sumo " + str(puntosPorGanarUnaPelea) + " resultado un total de " + str(agenteA.TotalDePuntos()))
+				#print("  - Al segundo jugador le sumo " + str(costoDePerderUnaPelea) + " resultado un total de " + str(agenteB.TotalDePuntos()))
+				#print("")
 		
 			# agenteA:siempreEscala y agenteB:escalaSiElOtroEsMasGrande
 			if agenteB.Estrategia() == "escalaSiElOtroEsMasGrande":
@@ -457,8 +515,8 @@ class Ambiente(Model):
 		
 			# agenteA:nuncaEscala y agenteB:siempreEscala
 			if agenteB.Estrategia() == "siempreEscala":
-					agenteA.SumarPuntos(sinPuntosPorRetirarse)
-					agenteB.SumarPuntos(puntosGanadosSinPelear)
+				agenteA.SumarPuntos(sinPuntosPorRetirarse)
+				agenteB.SumarPuntos(puntosGanadosSinPelear)
 		
 			# agenteA:nuncaEscala y agenteB:escalaSiElOtroEsMasGrande
 			if agenteB.Estrategia() == "escalaSiElOtroEsMasGrande":

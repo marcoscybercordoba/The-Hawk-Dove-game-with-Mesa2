@@ -173,25 +173,6 @@ class VisualizationElement:
         return "<b>VisualizationElement goes here</b>."
 
 # =============================================================================
-# Actual Tornado code starts here:
-
-
-class PageHandler(tornado.web.RequestHandler):
-    """ Handler for the HTML template which holds the visualization. """
-
-    def get(self):
-        elements = self.application.visualization_elements
-        for i, element in enumerate(elements):
-            element.index = i
-        self.render("realizaUnaSimulacionMuestraEvolucion.html", port=self.application.port,
-                    model_name=self.application.model_name,
-                    description=self.application.description,
-                    package_includes=self.application.package_includes,
-                    local_includes=self.application.local_includes,
-                    scripts=self.application.js_code)
-
-
-
 
 class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 	def get(self):
@@ -199,9 +180,12 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 
 
 		distaciaVecinos = 20
-		cantidadSiempreEscala = 2
-		cantidadNuncaEscala = 0
-		cantidadEscalaSiElOtroEsMasGrande = 0
+		cantidadSiempreEscalaChicos = 2
+		cantidadSiempreEscalaGrandes = 2
+		cantidadNuncaEscalaChicos = 0
+		cantidadNuncaEscalaGrandes = 0
+		cantidadEscalaSiElOtroEsMasGrandeChicos = 0
+		cantidadEscalaSiElOtroEsMasGrandeGrandes = 0
 		ValorDelRecurso = 1
 		CostoDeLesion = 0
 		ProbabilidadDeQueElMayorGane = 50
@@ -213,16 +197,23 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 			distaciaVecinos = int(self.get_argument('distaciaVecinos', None))
 
 
-		if self.get_argument('cantidadSiempreEscala', None) != None:
-			cantidadSiempreEscala = int(self.get_argument('cantidadSiempreEscala', None))
+		if self.get_argument('cantidadSiempreEscalaChicos', None) != None:
+			cantidadSiempreEscalaChicos = int(self.get_argument('cantidadSiempreEscalaChicos', None))
 
+		if self.get_argument('cantidadSiempreEscalaGrandes', None) != None:
+			cantidadSiempreEscalaGrandes = int(self.get_argument('cantidadSiempreEscalaGrandes', None))
 
-		if self.get_argument('cantidadNuncaEscala', None) != None:
-			cantidadNuncaEscala = int(self.get_argument('cantidadNuncaEscala', None))
+		if self.get_argument('cantidadNuncaEscalaChicos', None) != None:
+			cantidadNuncaEscalaChicos = int(self.get_argument('cantidadNuncaEscalaChicos', None))
 
+		if self.get_argument('cantidadNuncaEscalaGrandes', None) != None:
+			cantidadNuncaEscalaGrandes = int(self.get_argument('cantidadNuncaEscalaGrandes', None))
 
-		if self.get_argument('cantidadEscalaSiElOtroEsMasGrande', None) != None:
-			cantidadEscalaSiElOtroEsMasGrande = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrande', None))
+		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None) != None:
+			cantidadEscalaSiElOtroEsMasGrandeChicos = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None))
+
+		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None) != None:
+			cantidadEscalaSiElOtroEsMasGrandeGrandes = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None))
 
 
 		if self.get_argument('ValorDelRecurso', None) != None:
@@ -251,9 +242,12 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		ancho = 20
 
 		distanciaMaximaVecinos = distaciaVecinos 
-		cantidadDeHalcones = cantidadSiempreEscala
-		cantidadDeParadojicos = cantidadEscalaSiElOtroEsMasGrande
-		cantidadDePalomas = cantidadNuncaEscala
+		cantidadDeHalconesChicos = cantidadSiempreEscalaChicos
+		cantidadDeHalconesGrandes = cantidadSiempreEscalaGrandes
+		cantidadDeParadojicosChicos = cantidadEscalaSiElOtroEsMasGrandeChicos
+		cantidadDeParadojicosGrandes = cantidadEscalaSiElOtroEsMasGrandeGrandes
+		cantidadDePalomasChicos = cantidadNuncaEscalaChicos
+		cantidadDePalomasGrandes = cantidadNuncaEscalaGrandes
 		valorDelRecurso = ValorDelRecurso
 		costeDeLesion = CostoDeLesion
 		costoDeExhibicion = 5 
@@ -275,15 +269,18 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 
 		for i in range(int(cantidadDeSimulaciones)):
 
-			porcentajesStr = porcentajesStr + "(" + str(alto)  + "," + str(ancho)  + "," + str(distanciaMaximaVecinos)  + "," + str(cantidadDeHalcones)  + "," + str(cantidadDeParadojicos)  + "," + str(cantidadDePalomas)  + "," + str(valorDelRecurso)  + "," + str(costeDeLesion)  + "," + str(probabilidadDeQueElMayorGane1)  + "," + str(edadDeReproduccion)  + ")<br>"
+			#porcentajesStr = porcentajesStr + "(" + str(alto)  + "," + str(ancho)  + "," + str(distanciaMaximaVecinos)  + "," + str(cantidadDeHalcones)  + "," + str(cantidadDeParadojicos)  + "," + str(cantidadDePalomas)  + "," + str(valorDelRecurso)  + "," + str(costeDeLesion)  + "," + str(probabilidadDeQueElMayorGane1)  + "," + str(edadDeReproduccion)  + ")<br>"
 
 			ambiente = Ambiente( 
 				alto,
 				ancho,
 				distanciaMaximaVecinos, 
-				cantidadDeHalcones,
-				cantidadDeParadojicos,
-				cantidadDePalomas,
+				cantidadDeHalconesChicos,
+				cantidadDeHalconesGrandes,
+				cantidadDeParadojicosChicos,
+				cantidadDeParadojicosGrandes,
+				cantidadDePalomasChicos,
+				cantidadDePalomasGrandes,
 				valorDelRecurso,
 				costeDeLesion,
 				probabilidadDeQueElMayorGane1,
@@ -349,7 +346,7 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 
 
 
-		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distaciaVecinos=distaciaVecinos, cantidadSiempreEscala=cantidadSiempreEscala, cantidadNuncaEscala=cantidadNuncaEscala, cantidadEscalaSiElOtroEsMasGrande=cantidadEscalaSiElOtroEsMasGrande, ValorDelRecurso=ValorDelRecurso, CostoDeLesion=CostoDeLesion, ProbabilidadDeQueElMayorGane = ProbabilidadDeQueElMayorGane, EdadDeReproduccion=EdadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
+		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distaciaVecinos=distaciaVecinos, cantidadSiempreEscalaChicos=cantidadSiempreEscalaChicos, cantidadSiempreEscalaGrandes=cantidadSiempreEscalaGrandes, cantidadNuncaEscalaChicos=cantidadNuncaEscalaChicos, cantidadNuncaEscalaGrandes=cantidadNuncaEscalaGrandes, cantidadEscalaSiElOtroEsMasGrandeChicos=cantidadEscalaSiElOtroEsMasGrandeChicos, cantidadEscalaSiElOtroEsMasGrandeGrandes=cantidadEscalaSiElOtroEsMasGrandeGrandes, ValorDelRecurso=ValorDelRecurso, CostoDeLesion=CostoDeLesion, ProbabilidadDeQueElMayorGane = ProbabilidadDeQueElMayorGane, EdadDeReproduccion=EdadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
 
 
 
@@ -363,23 +360,23 @@ class HomePage(tornado.web.RequestHandler):
 
 
 class RealizaUnaSimulacionMuestraEvolucion(tornado.web.RequestHandler):
-    """ Handler for the HTML template which holds the visualization. """
+	""" Handler for the HTML template which holds the visualization. """
+	def get(self):
 
-    def get(self):
-        elements = self.application.visualization_elements
-        for i, element in enumerate(elements):
-            element.index = i
-        self.render("realizaUnaSimulacionMuestraEvolucion.html", port=self.application.port,
-                    model_name=self.application.model_name,
-                    description=self.application.description,
-                    package_includes=self.application.package_includes,
-                    local_includes=self.application.local_includes,
-                    scripts=self.application.js_code)
-
-
-
-
-
+		elements = self.application.visualization_elements
+		for i, element in enumerate(elements):
+			element.index = i
+		self.render("realizaUnaSimulacionMuestraEvolucion.html", port=self.application.port,
+		            model_name=self.application.model_name,
+		            description=self.application.description,
+		            package_includes=self.application.package_includes,
+		            local_includes=self.application.local_includes,
+		            scripts=self.application.js_code)
+	
+	
+	
+	
+	
 class SocketHandler(tornado.websocket.WebSocketHandler):
     """ Handler for websocket. """
     def open(self):

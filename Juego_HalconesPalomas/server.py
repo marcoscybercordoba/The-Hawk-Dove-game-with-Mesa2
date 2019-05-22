@@ -19,6 +19,8 @@ from Framework_Mesa.visualization.ModularVisualization import ModularServer
 from Framework_Mesa.visualization.modules import CanvasGrid, ChartModule, TextElement
 from Framework_Mesa.visualization.UserParam import UserSettableParameter
 
+#import tornado.web.RequestHandler
+
 from Framework_Mesa.visualization.TextVisualization import (
     TextData, TextGrid, TextVisualization
 )
@@ -135,16 +137,29 @@ chart_element = ChartModule([{"Label": "SiempreEscala_Grande", "Color": "#08088A
                              {"Label": "NuncaEscala_Grande", "Color": "#8A0829"},
                              {"Label": "NuncaEscala_Chico", "Color": "#FA5882"}])
 
+
+#a = Request.get_query_argument()
+
+#if RequestHandler.get_argument('CostoDeLesion', None) != None:
+#	CostoDeLesion = int(RequestHandler.get_argument('CostoDeLesion', None))
+
+#print("CostoDeLesion:" + str(CostoDeLesion))
+
 model_params = {
                 "distanciaMaximaVecinos": UserSettableParameter('slider', 'Distancia dentro de la cual se consideran adversarios', 20, 1, 20),
-                "cantidadDeHalcones": UserSettableParameter('slider', 'Cantidad inicial de los que siempren escalan', 2, 0, 10),
-                "cantidadDePalomas": UserSettableParameter('slider', 'Cantidad inicial de los que nunca escalan', 0, 0, 10), 
-                "cantidadDeParadojicos": UserSettableParameter('slider', 'Cantidad inicial de los que escalan si el adversario es mayor', 0, 0, 10),
+                "cantidadDeHalconesChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan', 1, 0, 10),
+                "cantidadDeHalconesGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan', 1, 0, 10),
+                "cantidadDePalomasChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que nunca escalan', 6, 0, 10), 
+                "cantidadDePalomasGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que nunca escalan', 6, 0, 10), 
+                "cantidadDeParadojicosChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mayor', 0, 0, 10),
+                "cantidadDeParadojicosGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mayor', 0, 0, 10),
                 "valorDelRecurso": UserSettableParameter('slider', 'Valor de un recurso', 1, 0, 10), 
-                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion', 0, 0, 10), 
+                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion', 2, 0, 10), 
                 "probabilidadDeQueElMayorGane1": UserSettableParameter('slider', 'Probabilidad de que el mayor gane el combate', 50, 0, 100), 
                 "edadDeReproduccion": UserSettableParameter('slider', 'Paso en que se produce la reproduccion y mueren', 5, 0, 1000) 
                 }
+
+#                "probabilidadDeQueElMayorGane2": UserSettableParameter('slider', 'Probabilidad de que el mayor gane el combate', {{ProbabilidadDeQueElMayorGane}}, 0, 100), 
 
 histogram = HistogramModule(list(range(10)), 200, 500)
 
