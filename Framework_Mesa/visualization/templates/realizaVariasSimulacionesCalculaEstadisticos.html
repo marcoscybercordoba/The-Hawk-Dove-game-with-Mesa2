@@ -53,10 +53,10 @@
 <div class="slidecontainer">
 
 <p>
-Distancia dentro de la cual se consideran que son vecinos
+Distancia maxima dentro de la cual se consideran que son vecinos
 <br>
-<input type="range" min="1" max="20" value="{{distaciaVecinos}}" class="slider" id="distaciaVecinos" name="distaciaVecinos">
-<span id="distaciaVecinosSpan">
+<input type="range" min="1" max="20" value="{{distanciaMaximaVecinos}}" class="slider" id="distanciaMaximaVecinos" name="distanciaMaximaVecinos">
+<span id="distanciaMaximaVecinosSpan">
 </span>
 </p>
 
@@ -113,24 +113,24 @@ Cantidad inicial de individuos grandes que nunca escalan
 <p>
 Valor de un recurso
 <br>
-<input type="range" min="0" max="10" value="{{ValorDelRecurso}}" class="slider" id="ValorDelRecurso" name="ValorDelRecurso">
-<span id="ValorDelRecursoSpan">
+<input type="range" min="0" max="10" value="{{valorDelRecurso}}" class="slider" id="valorDelRecurso" name="valorDelRecurso">
+<span id="valorDelRecursoSpan">
 </span>
 </p>
 
 <p>
 Costo de una lesion
 <br>
-<input type="range" min="0" max="10" value="{{CostoDeLesion}}" class="slider" id="CostoDeLesion" name="CostoDeLesion">
-<span id="CostoDeLesionSpan">
+<input type="range" min="0" max="10" value="{{costoDeLesion}}" class="slider" id="costoDeLesion" name="costoDeLesion">
+<span id="costoDeLesionSpan">
 </span>
 </p>
 
 <p>
 Probabilidad de que el mayor gane
 <br>
-<input type="range" min="0" max="100" value="{{ProbabilidadDeQueElMayorGane}}" class="slider" id="ProbabilidadDeQueElMayorGane" name="ProbabilidadDeQueElMayorGane">
-<span id="ProbabilidadDeQueElMayorGaneSpan">
+<input type="range" min="0" max="100" value="{{probabilidadDeQueElMayorGane}}" class="slider" id="probabilidadDeQueElMayorGane" name="probabilidadDeQueElMayorGane">
+<span id="probabilidadDeQueElMayorGaneSpan">
 </span>
 </p>
 
@@ -138,8 +138,8 @@ Probabilidad de que el mayor gane
 <p>
 Edad en que se produce la reproduccion y mueren
 <br>
-<input type="range" min="0" max="1000" value="{{EdadDeReproduccion}}" class="slider" id="EdadDeReproduccion" name="EdadDeReproduccion">
-<span id="EdadDeReproduccionSpan">
+<input type="range" min="0" max="1000" value="{{edadDeReproduccion}}" class="slider" id="edadDeReproduccion" name="edadDeReproduccion">
+<span id="edadDeReproduccionSpan">
 </span>
 </p>
 
@@ -172,12 +172,12 @@ Cantidad de pasos dados en cada una de las simulaciones
 <script>
 
 
-var distaciaVecinosVar = document.getElementById("distaciaVecinos");
-var distaciaVecinosOutput = document.getElementById("distaciaVecinosSpan");
-distaciaVecinosOutput.innerHTML = distaciaVecinosVar.value;
+var distanciaMaximaVecinosVar = document.getElementById("distanciaMaximaVecinos");
+var distanciaMaximaVecinosOutput = document.getElementById("distanciaMaximaVecinosSpan");
+distanciaMaximaVecinosOutput.innerHTML = distanciaMaximaVecinosVar.value;
 
-distaciaVecinosVar.oninput = function() {
-  distaciaVecinosOutput.innerHTML = this.value;
+distanciaMaximaVecinosVar.oninput = function() {
+  distanciaMaximaVecinosOutput.innerHTML = this.value;
 }
 
 
@@ -233,41 +233,41 @@ cantidadEscalaSiElOtroEsMasGrandeGrandesslider.oninput = function() {
 }
 
 
-var ValorDelRecursoslider = document.getElementById("ValorDelRecurso");
-var ValorDelRecursooutput = document.getElementById("ValorDelRecursoSpan");
-ValorDelRecursooutput.innerHTML = ValorDelRecursoslider.value;
+var valorDelRecursoslider = document.getElementById("valorDelRecurso");
+var valorDelRecursooutput = document.getElementById("valorDelRecursoSpan");
+valorDelRecursooutput.innerHTML = valorDelRecursoslider.value;
 
-ValorDelRecursoslider.oninput = function() {
-  ValorDelRecursooutput.innerHTML = this.value;
+valorDelRecursoslider.oninput = function() {
+  valorDelRecursooutput.innerHTML = this.value;
 }
 
 
-var CostoDeLesionslider = document.getElementById("CostoDeLesion");
-var CostoDeLesionoutput = document.getElementById("CostoDeLesionSpan");
-CostoDeLesionoutput.innerHTML = CostoDeLesionslider.value;
+var costoDeLesionslider = document.getElementById("costoDeLesion");
+var costoDeLesionoutput = document.getElementById("costoDeLesionSpan");
+costoDeLesionoutput.innerHTML = costoDeLesionslider.value;
 
-CostoDeLesionslider.oninput = function() {
-  CostoDeLesionoutput.innerHTML = this.value;
+costoDeLesionslider.oninput = function() {
+  costoDeLesionoutput.innerHTML = this.value;
 }
 
 
-var ProbabilidadDeQueElMayorGaneslider = document.getElementById("ProbabilidadDeQueElMayorGane");
-var ProbabilidadDeQueElMayorGaneoutput = document.getElementById("ProbabilidadDeQueElMayorGaneSpan");
-ProbabilidadDeQueElMayorGaneoutput.innerHTML = ProbabilidadDeQueElMayorGaneslider.value;
+var probabilidadDeQueElMayorGaneslider = document.getElementById("probabilidadDeQueElMayorGane");
+var probabilidadDeQueElMayorGaneoutput = document.getElementById("probabilidadDeQueElMayorGaneSpan");
+probabilidadDeQueElMayorGaneoutput.innerHTML = probabilidadDeQueElMayorGaneslider.value;
 
-ProbabilidadDeQueElMayorGaneslider.oninput = function() {
-  ProbabilidadDeQueElMayorGaneoutput.innerHTML = this.value;
+probabilidadDeQueElMayorGaneslider.oninput = function() {
+  probabilidadDeQueElMayorGaneoutput.innerHTML = this.value;
 }
 
 
 
 
-var EdadDeReproduccionslider = document.getElementById("EdadDeReproduccion");
-var EdadDeReproduccionoutput = document.getElementById("EdadDeReproduccionSpan");
-EdadDeReproduccionoutput.innerHTML = EdadDeReproduccionslider.value;
+var edadDeReproduccionslider = document.getElementById("edadDeReproduccion");
+var edadDeReproduccionoutput = document.getElementById("edadDeReproduccionSpan");
+edadDeReproduccionoutput.innerHTML = edadDeReproduccionslider.value;
 
-EdadDeReproduccionslider.oninput = function() {
-  EdadDeReproduccionoutput.innerHTML = this.value;
+edadDeReproduccionslider.oninput = function() {
+  cdadDeReproduccionoutput.innerHTML = this.value;
 }
 
 

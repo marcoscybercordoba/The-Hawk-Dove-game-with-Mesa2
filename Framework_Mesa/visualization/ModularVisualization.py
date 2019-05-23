@@ -177,57 +177,55 @@ class VisualizationElement:
 class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 	def get(self):
 
-
-
-		distaciaVecinos = 20
-		cantidadSiempreEscalaChicos = 2
-		cantidadSiempreEscalaGrandes = 2
-		cantidadNuncaEscalaChicos = 0
-		cantidadNuncaEscalaGrandes = 0
-		cantidadEscalaSiElOtroEsMasGrandeChicos = 0
-		cantidadEscalaSiElOtroEsMasGrandeGrandes = 0
-		ValorDelRecurso = 1
-		CostoDeLesion = 0
-		ProbabilidadDeQueElMayorGane = 50
-		EdadDeReproduccion = 5
+		distanciaMaximaVecinos = 20
+		cantidadSiempreEscalaChicosInicial = 2
+		cantidadSiempreEscalaGrandesInicial = 2
+		cantidadNuncaEscalaChicosInicial = 0
+		cantidadNuncaEscalaGrandesInicial = 0
+		cantidadEscalaSiElOtroEsMasGrandeChicosInicial = 0
+		cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = 0
+		valorDelRecurso = 1
+		costoDeLesion = 0
+		probabilidadDeQueElMayorGane = 50
+		edadDeReproduccion = 5
 		cantidadDeSimulaciones = 2
 		cantidadDePasos = 30
 
-		if self.get_argument('distaciaVecinos', None) != None:
-			distaciaVecinos = int(self.get_argument('distaciaVecinos', None))
+		if self.get_argument('distanciaMaximaVecinos', None) != None:
+			distanciaMaximaVecinos = int(self.get_argument('distanciaMaximaVecinos', None))
 
 
 		if self.get_argument('cantidadSiempreEscalaChicos', None) != None:
-			cantidadSiempreEscalaChicos = int(self.get_argument('cantidadSiempreEscalaChicos', None))
+			cantidadSiempreEscalaChicosInicial = int(self.get_argument('cantidadSiempreEscalaChicos', None))
 
 		if self.get_argument('cantidadSiempreEscalaGrandes', None) != None:
-			cantidadSiempreEscalaGrandes = int(self.get_argument('cantidadSiempreEscalaGrandes', None))
+			cantidadSiempreEscalaGrandesInicial = int(self.get_argument('cantidadSiempreEscalaGrandes', None))
 
 		if self.get_argument('cantidadNuncaEscalaChicos', None) != None:
-			cantidadNuncaEscalaChicos = int(self.get_argument('cantidadNuncaEscalaChicos', None))
+			cantidadNuncaEscalaChicosInicial = int(self.get_argument('cantidadNuncaEscalaChicos', None))
 
 		if self.get_argument('cantidadNuncaEscalaGrandes', None) != None:
-			cantidadNuncaEscalaGrandes = int(self.get_argument('cantidadNuncaEscalaGrandes', None))
+			cantidadNuncaEscalaGrandesInicial = int(self.get_argument('cantidadNuncaEscalaGrandes', None))
 
 		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None) != None:
-			cantidadEscalaSiElOtroEsMasGrandeChicos = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None))
+			cantidadEscalaSiElOtroEsMasGrandeChicosInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None))
 
 		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None) != None:
-			cantidadEscalaSiElOtroEsMasGrandeGrandes = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None))
+			cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None))
 
 
-		if self.get_argument('ValorDelRecurso', None) != None:
-			ValorDelRecurso = int(self.get_argument('ValorDelRecurso', None))
+		if self.get_argument('valorDelRecurso', None) != None:
+			valorDelRecurso = int(self.get_argument('valorDelRecurso', None))
 
 
-		if self.get_argument('CostoDeLesion', None) != None:
-			CostoDeLesion = int(self.get_argument('CostoDeLesion', None))
+		if self.get_argument('costoDeLesion', None) != None:
+			costoDeLesion = int(self.get_argument('costoDeLesion', None))
 
-		if self.get_argument('ProbabilidadDeQueElMayorGane', None) != None:
-			ProbabilidadDeQueElMayorGane = int(self.get_argument('ProbabilidadDeQueElMayorGane', None))
+		if self.get_argument('probabilidadDeQueElMayorGane', None) != None:
+			probabilidadDeQueElMayorGane = int(self.get_argument('probabilidadDeQueElMayorGane', None))
 
-		if self.get_argument('EdadDeReproduccion', None) != None:
-			EdadDeReproduccion = int(self.get_argument('EdadDeReproduccion', None))
+		if self.get_argument('edadDeReproduccion', None) != None:
+			edadDeReproduccion = int(self.get_argument('edadDeReproduccion', None))
 
 		if self.get_argument('CantidadDeSimulaciones', None) != None:
 			cantidadDeSimulaciones = int(self.get_argument('CantidadDeSimulaciones', None))
@@ -235,39 +233,28 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		if self.get_argument('CantidadDePasos', None) != None:
 			cantidadDePasos = int(self.get_argument('CantidadDePasos', None))
 
-
-
-
 		alto = 20
 		ancho = 20
-
-		distanciaMaximaVecinos = distaciaVecinos 
-		cantidadDeHalconesChicos = cantidadSiempreEscalaChicos
-		cantidadDeHalconesGrandes = cantidadSiempreEscalaGrandes
-		cantidadDeParadojicosChicos = cantidadEscalaSiElOtroEsMasGrandeChicos
-		cantidadDeParadojicosGrandes = cantidadEscalaSiElOtroEsMasGrandeGrandes
-		cantidadDePalomasChicos = cantidadNuncaEscalaChicos
-		cantidadDePalomasGrandes = cantidadNuncaEscalaGrandes
-		valorDelRecurso = ValorDelRecurso
-		costeDeLesion = CostoDeLesion
-		costoDeExhibicion = 5 
-		probabilidadDeQueElMayorGane1 = ProbabilidadDeQueElMayorGane
-		edadDeReproduccion = EdadDeReproduccion
-
-		
 		
 		listaDePorcentajes1 = []
 		listaDePorcentajes2 = []
 		porcentajesStr = ""
 
-		cantidadDeHalconesGrandeMedia = 0
-		cantidadDeHalconesChicoMedia = 0
-		cantidadDePalomasGrandeMedia = 0
-		cantidadDePalomasChicoMedia = 0
-		cantidadDeParadojicosGrandeMedia = 0
-		cantidadDeParadojicosChicoMedia = 0
+		cantidadSiempreEscalaGrandesMedia = 0
+		cantidadSiempreEscalaChicosMedia = 0
+		cantidadNuncaEscalaGrandesMedia = 0
+		cantidadNuncaEscalaChicosMedia = 0
+		cantidadEscalaSiElOtroEsMasGrandeGrandesMedia = 0
+		cantidadEscalaSiElOtroEsMasGrandeChicosMedia = 0
 
 		for i in range(int(cantidadDeSimulaciones)):
+
+			cantidadSiempreEscalaGrandes = cantidadSiempreEscalaGrandesInicial
+			cantidadSiempreEscalaChicos = cantidadSiempreEscalaChicosInicial
+			cantidadNuncaEscalaGrandes = cantidadNuncaEscalaGrandesInicial
+			cantidadNuncaEscalaChicos = cantidadNuncaEscalaChicosInicial
+			cantidadEscalaSiElOtroEsMasGrandeGrandes = cantidadEscalaSiElOtroEsMasGrandeGrandesInicial
+			cantidadEscalaSiElOtroEsMasGrandeChicos = cantidadEscalaSiElOtroEsMasGrandeChicosInicial
 
 			#porcentajesStr = porcentajesStr + "(" + str(alto)  + "," + str(ancho)  + "," + str(distanciaMaximaVecinos)  + "," + str(cantidadDeHalcones)  + "," + str(cantidadDeParadojicos)  + "," + str(cantidadDePalomas)  + "," + str(valorDelRecurso)  + "," + str(costeDeLesion)  + "," + str(probabilidadDeQueElMayorGane1)  + "," + str(edadDeReproduccion)  + ")<br>"
 
@@ -275,42 +262,42 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 				alto,
 				ancho,
 				distanciaMaximaVecinos, 
-				cantidadDeHalconesChicos,
-				cantidadDeHalconesGrandes,
-				cantidadDeParadojicosChicos,
-				cantidadDeParadojicosGrandes,
-				cantidadDePalomasChicos,
-				cantidadDePalomasGrandes,
+				cantidadSiempreEscalaChicos,
+				cantidadSiempreEscalaGrandes,
+				cantidadEscalaSiElOtroEsMasGrandeChicos,
+				cantidadEscalaSiElOtroEsMasGrandeGrandes,
+				cantidadNuncaEscalaChicos,
+				cantidadNuncaEscalaGrandes,
 				valorDelRecurso,
-				costeDeLesion,
-				probabilidadDeQueElMayorGane1,
+				costoDeLesion,
+				probabilidadDeQueElMayorGane,
 				edadDeReproduccion
 				)	
 
 		
 			porcentajesStr = porcentajesStr + "<b>Simulacion: "+ str(i+1) + "</b><br>"
-			porcentajesStr = porcentajesStr + "<br><table><tr><i><td>Paso </td><td>(HalconesGrande,</td><td> HalconesChico, </td><td>PalomasGrande, </td><td>PalomasChico, </td><td>ParadojicosGrande, </td><td>ParadojicosChico)</td><td></i></tr>"
+			porcentajesStr = porcentajesStr + "<br><table border='1'><tr><i><td>Paso </td><td>Chico_NuncaEscala</td><td>Grande_NuncaEscala</td><td>Chico_SiempreEscala</td><td>Grande_SiempreEscala</td><td>Chico_EscalaSoloSiElOtroEsMasGrande</td><td>Grande_EscalaSoloSiElOtroEsMasGrande</td><td></i></tr>"
+
 		
 			for j in range(int(cantidadDePasos)):
 				ambiente.step()
 
-				cantidadDeHalconesGrande = ambiente.schedule.cantidadDeJugadores("siempreEscala", "grande")
-				cantidadDeHalconesChico = ambiente.schedule.cantidadDeJugadores("siempreEscala", "chico")
-				cantidadDePalomasGrande = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "grande")
-				cantidadDePalomasChico = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "chico")
-				cantidadDeParadojicosGrande = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "grande")
-				cantidadDeParadojicosChico = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "chico")
+				cantidadSiempreEscalaGrandes = ambiente.schedule.cantidadDeJugadores("siempreEscala", "grande")
+				cantidadSiempreEscalaChicos = ambiente.schedule.cantidadDeJugadores("siempreEscala", "chico")
+				cantidadNuncaEscalaGrandes = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "grande")
+				cantidadNuncaEscalaChicos = ambiente.schedule.cantidadDeJugadores("nuncaEscala", "chico")
+				cantidadEscalaSiElOtroEsMasGrandeGrandes = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "grande")
+				cantidadEscalaSiElOtroEsMasGrandeChicos = ambiente.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "chico")
 		
 				porcentajes =	(
-						cantidadDeHalconesGrande, 
-						cantidadDeHalconesChico,
-						cantidadDePalomasGrande,
-						cantidadDePalomasChico,
-						cantidadDeParadojicosGrande,
-						cantidadDeParadojicosChico
+						cantidadSiempreEscalaGrandes, 
+						cantidadSiempreEscalaChicos,
+						cantidadNuncaEscalaGrandes,
+						cantidadNuncaEscalaChicos,
+						cantidadEscalaSiElOtroEsMasGrandeGrandes,
+						cantidadEscalaSiElOtroEsMasGrandeChicos
 						)
-				porcentajesStr = porcentajesStr + "<tr><td><br><i>  "+ str(j + 1) + ": </i></td><td>("+str(cantidadDeHalconesGrande)+"</td><td>"+str(cantidadDeHalconesChico)+"</td><td>"+str(cantidadDePalomasGrande)+"</td><td>"+str(cantidadDePalomasChico)+"</td><td>"+str(cantidadDeParadojicosGrande)+"</td><td>"+str(cantidadDeParadojicosChico)+")</td></tr>"
-				#porcentajesStr = "("+str(cantidadDeHalconesGrande)+","+str(cantidadDeHalconesChico)+","+str(cantidadDePalomasGrande)+","+str(cantidadDePalomasChico)+","+str(cantidadDeParadojicosGrande)+","+str(cantidadDeParadojicosChico)+")"
+				porcentajesStr = porcentajesStr + "<tr><td><br><i>  "+ str(j + 1) + " </i></td><td>"+ str(cantidadNuncaEscalaChicos) +"</td><td>"+str(cantidadNuncaEscalaGrandes)+"</td><td>"+ str(cantidadSiempreEscalaChicos) +"</td><td>"+str(cantidadSiempreEscalaGrandes)+"</td><td>"+ str(cantidadEscalaSiElOtroEsMasGrandeChicos) +"</td><td>"+str(cantidadEscalaSiElOtroEsMasGrandeGrandes)+"</td></tr>"
 		
 				print(porcentajesStr)
 			
@@ -319,34 +306,30 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 
 			porcentajesStr = porcentajesStr + "</table>"
 
-			cantidadDeHalconesGrandeMedia = cantidadDeHalconesGrandeMedia + cantidadDeHalconesGrande
-			cantidadDeHalconesChicoMedia = cantidadDeHalconesChicoMedia + cantidadDeHalconesChico
-			cantidadDePalomasGrandeMedia = cantidadDePalomasGrandeMedia + cantidadDePalomasGrande
-			cantidadDePalomasChicoMedia = cantidadDePalomasChicoMedia + cantidadDePalomasChico
-			cantidadDeParadojicosGrandeMedia = cantidadDeParadojicosGrandeMedia + cantidadDeParadojicosGrande
-			cantidadDeParadojicosChicoMedia = cantidadDeParadojicosChicoMedia + cantidadDeParadojicosChico
+			cantidadSiempreEscalaGrandesMedia = cantidadSiempreEscalaGrandesMedia + cantidadSiempreEscalaGrandes
+			cantidadSiempreEscalaChicosMedia = cantidadSiempreEscalaChicosMedia + cantidadSiempreEscalaChicos
+			cantidadNuncaEscalaGrandesMedia = cantidadNuncaEscalaGrandesMedia + cantidadNuncaEscalaGrandes
+			cantidadNuncaEscalaChicosMedia = cantidadNuncaEscalaChicosMedia + cantidadNuncaEscalaChicos
+			cantidadEscalaSiElOtroEsMasGrandeGrandesMedia = cantidadEscalaSiElOtroEsMasGrandeGrandesMedia + cantidadEscalaSiElOtroEsMasGrandeGrandes
+			cantidadEscalaSiElOtroEsMasGrandeChicosMedia = cantidadEscalaSiElOtroEsMasGrandeChicosMedia + cantidadEscalaSiElOtroEsMasGrandeChicos
 
 			porcentajesStr = porcentajesStr + "<br><br><br>"
 
-		cantidadDeHalconesGrandeMedia = cantidadDeHalconesGrandeMedia / cantidadDeSimulaciones
-		cantidadDeHalconesChicoMedia = cantidadDeHalconesChicoMedia / cantidadDeSimulaciones
-		cantidadDePalomasGrandeMedia = cantidadDePalomasGrandeMedia / cantidadDeSimulaciones
-		cantidadDePalomasChicoMedia = cantidadDePalomasChicoMedia / cantidadDeSimulaciones
-		cantidadDeParadojicosGrandeMedia = cantidadDeParadojicosGrandeMedia / cantidadDeSimulaciones
-		cantidadDeParadojicosChicoMedia = cantidadDeParadojicosChicoMedia / cantidadDeSimulaciones
+		cantidadSiempreEscalaGrandesMedia = cantidadSiempreEscalaGrandesMedia / cantidadDeSimulaciones
+		cantidadSiempreEscalaChicosMedia = cantidadSiempreEscalaChicosMedia / cantidadDeSimulaciones
+		cantidadNuncaEscalaGrandesMedia = cantidadNuncaEscalaGrandesMedia / cantidadDeSimulaciones
+		cantidadNuncaEscalaChicosMedia = cantidadNuncaEscalaChicosMedia / cantidadDeSimulaciones
+		cantidadEscalaSiElOtroEsMasGrandeGrandesMedia = cantidadEscalaSiElOtroEsMasGrandeGrandesMedia / cantidadDeSimulaciones
+		cantidadEscalaSiElOtroEsMasGrandeChicosMedia = cantidadEscalaSiElOtroEsMasGrandeChicosMedia / cantidadDeSimulaciones
 
 		porcentajesStr = porcentajesStr + "<br><br><br>"
 
 		porcentajesStr = porcentajesStr + "<b>Cantidades medias de las "+ str(i+1) + " simulaciones</b><br>"
-		porcentajesStr = porcentajesStr + "<br><table><tr><i><td>-</td><td>(HalconesGrande,</td><td> HalconesChico, </td><td>PalomasGrande, </td><td>PalomasChico, </td><td>ParadojicosGrande, </td><td>ParadojicosChico)</td><td></i></tr>"
+		porcentajesStr = porcentajesStr + "<br><table border='1'><tr><i><td>-</td><td>Chico_NuncaEscala</td><td>Grande_NuncaEscala</td><td>Chico_SiempreEscala</td><td>Grande_SiempreEscala</td><td>Chico_EscalaSoloSiElOtroEsMasGrande</td><td>Grande_EscalaSoloSiElOtroEsMasGrande</td><td></i></tr>"
 
-		porcentajesStr = porcentajesStr + "<tr><td>-</td><td>(" + str(cantidadDeHalconesGrandeMedia) + ",</td><td>" + str(cantidadDeHalconesChicoMedia) + ",</td><td>" + str(cantidadDePalomasGrandeMedia) + ",</td><td>" + str(cantidadDePalomasChicoMedia) + ",</td><td>" + str(cantidadDeParadojicosGrandeMedia) + ",</td><td>" + str(cantidadDeParadojicosChicoMedia) + ")</td><td></table>"
+		porcentajesStr = porcentajesStr + "<tr><td> - </td><td>" + str(cantidadNuncaEscalaChicosMedia) + "</td><td>" + str(cantidadNuncaEscalaGrandesMedia) + "</td><td>" +str(cantidadSiempreEscalaChicosMedia) + "</td><td>" + str(cantidadSiempreEscalaGrandesMedia) + "</td><td>" +  str(cantidadEscalaSiElOtroEsMasGrandeChicosMedia) + "</td><td>" + str(cantidadEscalaSiElOtroEsMasGrandeGrandesMedia) + "</td><td></table>"
 
-
-
-
-
-		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distaciaVecinos=distaciaVecinos, cantidadSiempreEscalaChicos=cantidadSiempreEscalaChicos, cantidadSiempreEscalaGrandes=cantidadSiempreEscalaGrandes, cantidadNuncaEscalaChicos=cantidadNuncaEscalaChicos, cantidadNuncaEscalaGrandes=cantidadNuncaEscalaGrandes, cantidadEscalaSiElOtroEsMasGrandeChicos=cantidadEscalaSiElOtroEsMasGrandeChicos, cantidadEscalaSiElOtroEsMasGrandeGrandes=cantidadEscalaSiElOtroEsMasGrandeGrandes, ValorDelRecurso=ValorDelRecurso, CostoDeLesion=CostoDeLesion, ProbabilidadDeQueElMayorGane = ProbabilidadDeQueElMayorGane, EdadDeReproduccion=EdadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
+		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distanciaMaximaVecinos=distanciaMaximaVecinos, cantidadSiempreEscalaChicos=cantidadSiempreEscalaChicos, cantidadSiempreEscalaGrandes=cantidadSiempreEscalaGrandes, cantidadNuncaEscalaChicos=cantidadNuncaEscalaChicos, cantidadNuncaEscalaGrandes=cantidadNuncaEscalaGrandes, cantidadEscalaSiElOtroEsMasGrandeChicos=cantidadEscalaSiElOtroEsMasGrandeChicos, cantidadEscalaSiElOtroEsMasGrandeGrandes=cantidadEscalaSiElOtroEsMasGrandeGrandes, valorDelRecurso=valorDelRecurso, costoDeLesion=costoDeLesion, probabilidadDeQueElMayorGane = probabilidadDeQueElMayorGane, edadDeReproduccion=edadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
 
 
 
