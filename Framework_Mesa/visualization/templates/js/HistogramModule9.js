@@ -13,9 +13,13 @@
 			"NuncaEscala Chico",
 			"EscalaSiElOtroEsMasGrande Grande",
 			"EscalaSiElOtroEsMasGrande Chico",
+			"EscalaSiElOtroEsMasChico Grande",
+			"EscalaSiElOtroEsMasChico Chico",
 			]
 
         dataNew = [
+			10,
+			23,
 			10,
 			23,
 			10,
@@ -36,6 +40,8 @@
 						"#FA5882",
 						"#868A08",
 						"#F2F5A9",
+						"#8a075a",
+						"#8a078a",
 					],
 				}],
 				labels : bins
@@ -52,7 +58,7 @@
 
 	        for (var i in dataNew) {
                     //alert(chart.data.datasets[0].data[i])
-	                chart.data.datasets[0].data[i] = 6;
+	                chart.data.datasets[0].data[i] = 8;
             }
 	        chart.update();
 

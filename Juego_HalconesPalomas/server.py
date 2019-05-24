@@ -30,7 +30,7 @@ class HistogramModule(VisualizationElement):
     #package_includes = "<script src='Framework_Mesa1/visualization/templates/js/Chart.bundle.min.js'></script>"
     #package_includes  = ["Framework_Mesa/visualization/templates/js/Chart.bundle.min.js"]
 
-    local_includes = ["Framework_Mesa/visualization/templates/js/HistogramModule6.js"]
+    local_includes = ["Framework_Mesa/visualization/templates/js/HistogramModule9.js"]
 
     def __init__(self, bins, canvas_height, canvas_width):
         self.canvas_height = canvas_height
@@ -59,7 +59,11 @@ class HistogramModule(VisualizationElement):
         
         porcentajeDeParadojicosChico = model.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasGrande", "chico")
 
-        return [porcentajeDeHalconesGrande, porcentajeDeHalconesChico, porcentajeDePalomasGrande, porcentajeDePalomasChico, porcentajeDeParadojicosGrande, porcentajeDeParadojicosChico]
+        porcentajeDeSentidoComunGrande = model.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasChico", "grande")
+        
+        porcentajeDeSentidoComunChico = model.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasChico", "chico")
+
+        return [porcentajeDeHalconesGrande, porcentajeDeHalconesChico, porcentajeDePalomasGrande, porcentajeDePalomasChico, porcentajeDeParadojicosGrande, porcentajeDeParadojicosChico, porcentajeDeSentidoComunGrande, porcentajeDeSentidoComunChico]
 
 def personalizacionDelAmbiente(agent):
     if agent is None:
@@ -127,6 +131,26 @@ def personalizacionDelAmbiente(agent):
         portrayal["Layer"] = 1
         portrayal["text_color"] = "#F2F5A9"
             
+    if agent.estrategia == "escalaSiElOtroEsMasChico" and agent.asimetriaAparente == "grande":
+        portrayal["Shape"] = "Juego_HalconesPalomas/resources/paradojicoGrande.png"
+        # https://icons8.com/web-app/36821/German-Shepherd
+        portrayal["Estrategia"] = agent.estrategia
+        portrayal["Asimetria"] = agent.asimetriaAparente
+        portrayal["Edad"] = round(agent.edad, 1)
+        portrayal["Puntos"] = agent.TotalDePuntos()
+        portrayal["Layer"] = 1
+        portrayal["text_color"] = "#8a075a"
+        
+    if agent.estrategia == "escalaSiElOtroEsMasChico" and agent.asimetriaAparente == "chico":
+        portrayal["Shape"] = "Juego_HalconesPalomas/resources/paradojicoChico.png"
+        # https://icons8.com/web-app/36821/German-Shepherd
+        portrayal["Estrategia"] = agent.estrategia
+        portrayal["Asimetria"] = agent.asimetriaAparente
+        portrayal["Edad"] = round(agent.edad, 1)
+        portrayal["Puntos"] = agent.TotalDePuntos()
+        portrayal["Layer"] = 1
+        portrayal["text_color"] = "#8a078a"
+
     return portrayal
 
 canvas_element = CanvasGrid(personalizacionDelAmbiente, 20, 20, 500, 500)
@@ -134,38 +158,32 @@ chart_element = ChartModule([{"Label": "SiempreEscala_Grande", "Color": "#08088A
                              {"Label": "SiempreEscala_Chico", "Color": "#5858FA"},
                              {"Label": "EscalaSiElOtroEsMasGrande_Grande", "Color": "#868A08"},
                              {"Label": "EscalaSiElOtroEsMasGrande_Chico", "Color": "#F2F5A9"},
+                             {"Label": "EscalaSiElOtroEsMasChico_Grande", "Color": "#8a075a"},
+                             {"Label": "EscalaSiElOtroEsMasChico_Chico", "Color": "#8a078a"},
                              {"Label": "NuncaEscala_Grande", "Color": "#8A0829"},
                              {"Label": "NuncaEscala_Chico", "Color": "#FA5882"}])
 
 
-#a = Request.get_query_argument()
-
-#if RequestHandler.get_argument('CostoDeLesion', None) != None:
-#	CostoDeLesion = int(RequestHandler.get_argument('CostoDeLesion', None))
-
-#print("CostoDeLesion:" + str(CostoDeLesion))
 
 model_params = {
                 "distanciaMaximaVecinos": UserSettableParameter('slider', 'Distancia dentro de la cual se consideran adversarios', 20, 1, 20),
-                "cantidadDeHalconesChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan', 1, 0, 10),
-                "cantidadDeHalconesGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan', 1, 0, 10),
-                "cantidadDePalomasChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que nunca escalan', 6, 0, 10), 
-                "cantidadDePalomasGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que nunca escalan', 6, 0, 10), 
-                "cantidadDeParadojicosChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mayor', 0, 0, 10),
-                "cantidadDeParadojicosGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mayor', 0, 0, 10),
-                "valorDelRecurso": UserSettableParameter('slider', 'Valor de un recurso', 1, 0, 10), 
-                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion', 2, 0, 10), 
-                "probabilidadDeQueElMayorGane1": UserSettableParameter('slider', 'Probabilidad de que el mayor gane el combate', 50, 0, 100), 
+                "cantidadDePalomasChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10), 
+                "cantidadDePalomasGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10), 
+                "cantidadDeHalconesChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan. Nunca comparten, gana o pierde el recurso', 1, 0, 10),
+                "cantidadDeHalconesGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan. Nunca comparten, gana o pierde el recurso', 1, 0, 10),
+                "cantidadDeParadojicosChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas grande', 6, 0, 10),
+                "cantidadDeParadojicosGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas grande', 6, 0, 10),
+                "cantidadDeSentidoComunChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas chico', 6, 0, 10),
+                "cantidadDeSentidoComunGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas chico', 6, 0, 10),
+                "valorDelRecurso": UserSettableParameter('slider', 'Valor de un recurso. El ganador de un combate se queda con todo el recurso, si se comparte es mitad para cada uno', 1, 0, 10), 
+                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion. Solo el perdedor de un combate paga el costo', 2, 0, 10), 
+                "porcentajeDeQueElMayorGane": UserSettableParameter('slider', 'Porcentaje de veces que el mas grande gana un combate. Si los individuos tienen el mismo tama&#xF1;o la mitad de las veces gana uno y la otra mitad gana el otro.', 100, 0, 100), 
                 "edadDeReproduccion": UserSettableParameter('slider', 'Paso en que se produce la reproduccion y mueren', 5, 0, 1000) 
                 }
 
-#                "probabilidadDeQueElMayorGane2": UserSettableParameter('slider', 'Probabilidad de que el mayor gane el combate', {{ProbabilidadDeQueElMayorGane}}, 0, 100), 
 
 histogram = HistogramModule(list(range(10)), 200, 500)
 
-#                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion', 10, 0, 50), 
-#                "costeDeLesion1": UserSettableParameter('slider', 'Costo de una lesion', 10, 0, 50), 
-#                "probabilidadDeQueElMayorGane1": UserSettableParameter('slider', 'Probabilidad de que el mayor gana el combate', 50, 0, 100)
 
 
 # Asimetria arbitraria

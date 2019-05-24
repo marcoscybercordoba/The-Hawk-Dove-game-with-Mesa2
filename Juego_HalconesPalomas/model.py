@@ -5,6 +5,8 @@ from Framework_Mesa.datacollection import DataCollector
 from Juego_HalconesPalomas.agentes import Jugadores
 from Juego_HalconesPalomas.schedule import RandomActivationByBreed
 
+from Juego_HalconesPalomas.ResultadoDeEncuentroEntreDosIndividuos import ResultadoDeEncuentroEntreDosIndividuos
+
 import random
 
 class Ambiente(Model):
@@ -35,11 +37,13 @@ class Ambiente(Model):
 		cantidadDeHalconesGrandes = 2,
 		cantidadDeParadojicosChicos = 0,
 		cantidadDeParadojicosGrandes = 0,
+		cantidadDeSentidoComunChicos = 0,
+		cantidadDeSentidoComunGrandes = 0,
 		cantidadDePalomasChicos = 0,
 		cantidadDePalomasGrandes = 0,
 		valorDelRecurso = 1,
 		costeDeLesion = 0,
-		probabilidadDeQueElMayorGane1 = 50, 
+		porcentajeDeQueElMayorGane = 50, 
 		edadDeReproduccion = 2
 		):
 		
@@ -62,13 +66,14 @@ class Ambiente(Model):
 		self.cantidadDeParadojicosChicos = cantidadDeParadojicosChicos
 		self.cantidadDeParadojicosGrandes = cantidadDeParadojicosGrandes
 
+		self.cantidadDeSentidoComunChicos = cantidadDeSentidoComunChicos
+		self.cantidadDeSentidoComunGrandes = cantidadDeSentidoComunGrandes
+
 		self.valorDelRecurso = valorDelRecurso
 		self.costeDeLesion = costeDeLesion
 		
 		self.edadDeReproduccion = edadDeReproduccion
 		
-		self.probabilidadDeQueElMayorGane1 = probabilidadDeQueElMayorGane1
-
 		self.schedule = RandomActivationByBreed(self)
 		self.grid = MultiGrid(20, 20, torus=True)
 		
@@ -79,12 +84,12 @@ class Ambiente(Model):
 			"SiempreEscala_Chico": lambda m: m.schedule.cantidadDeJugadores("siempreEscala", "chico"),
 			"EscalaSiElOtroEsMasGrande_Grande": lambda m: m.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "grande"),
 			"EscalaSiElOtroEsMasGrande_Chico": lambda m: m.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "chico"),
-			"SentidoComunGrande": lambda m: m.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "grande"),
-			"SentidoComunChico": lambda m: m.schedule.cantidadDeJugadores("escalaSiElOtroEsMasGrande", "chico"),
+			"EscalaSiElOtroEsMasChico_Grande": lambda m: m.schedule.cantidadDeJugadores("escalaSiElOtroEsMasChico", "grande"),
+			"EscalaSiElOtroEsMasChico_Chico": lambda m: m.schedule.cantidadDeJugadores("escalaSiElOtroEsMasChico", "chico"),
 			"NuncaEscala_Grande": lambda m: m.schedule.cantidadDeJugadores("nuncaEscala", "grande"),
 			"NuncaEscala_Chico": lambda m: m.schedule.cantidadDeJugadores("nuncaEscala", "chico")})
 
-		self.probabilidadDeQueElMayorGane1 = probabilidadDeQueElMayorGane1 / 100.00
+		self.probabilidadDeQueElMayorGane1 = porcentajeDeQueElMayorGane / 100.00
 		
 		i = 0
 		while i < self.cantidadDeHalconesChicos:
@@ -194,6 +199,42 @@ class Ambiente(Model):
 			self.schedule.add(jugador1)
 			
 			i = i + 1
+
+
+		i = 0
+		while i < self.cantidadDeSentidoComunChicos:
+			
+			x = random.randrange(self.ancho)
+			y = random.randrange(self.alto)
+			
+			id = self.next_id()
+			estrategia = "escalaSiElOtroEsMasChico"
+			localia = None
+			asimetriaAparente = "grande"
+			pos = (x, y)
+			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
+			self.grid.place_agent(jugador1, (x, y))
+			self.schedule.add(jugador1)
+			
+			i = i + 1
+			
+		i = 0
+		while i < self.cantidadDeSentidoComunGrandes:
+			
+			x = random.randrange(self.ancho)
+			y = random.randrange(self.alto)
+			
+			id = self.next_id()
+			estrategia = "escalaSiElOtroEsMasChico"
+			localia = None
+			asimetriaAparente = "chico"
+			pos = (x, y)
+			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
+			self.grid.place_agent(jugador1, (x, y))
+			self.schedule.add(jugador1)
+			
+			i = i + 1
+
 
 		self.datacollector.collect(self)     
 		self.running = True
@@ -357,7 +398,7 @@ class Ambiente(Model):
 							
 						if (not (agenteA.unique_id == agenteB.unique_id)) and (agenteB.GetCombatioContraAlguienEnEstaEpoca() == False):
 
-							(agenteA, agenteB) = self.ResultadoDeUnEncuentreEntreDosIndividuos(agenteA, agenteB)
+							(agenteA, agenteB) = ResultadoDeEncuentroEntreDosIndividuos(agenteA, agenteB, self.valorDelRecurso, self.costeDeLesion, self.probabilidadDeQueElMayorGane1)
 
 						j = j + 1
 						
@@ -373,268 +414,6 @@ class Ambiente(Model):
 
 		self.paso = self.paso + 1
 
-	def ResultadoDeUnEncuentreEntreDosIndividuos(self, agenteA, agenteB):
-
-		#print("probabilidadDeQueElMayorGane1:"+str(self.probabilidadDeQueElMayorGane1))
-	
-		(posA0, posA1) = agenteA.pos
-		(posB0, posB1) = agenteB.pos
-
-		costoDePerderUnaPelea = round((-self.costeDeLesion), 2)
-		puntosPorGanarUnaPelea = round((self.valorDelRecurso), 2)
-		puntosGanadosPorCompartirElRecurso = round((self.valorDelRecurso/2), 2)
-		sinPuntosPorRetirarse = 0
-		puntosGanadosSinPelear = round((self.valorDelRecurso), 2)
-
-		probabilidadDeQueElMayorGane1 = self.probabilidadDeQueElMayorGane1
-
-		#(puntosPorGanarUnaPelea - costoDePerderUnaPelea-/2
-		#puntosPorGanarUnaPelea = 1
-		#costoDePerderUnaPelea = 0
-
-		probabilidadDeQueElMayorGane1 = 0.5
-		
-		if agenteA.Estrategia() == "siempreEscala":
-
-			# agenteA:siempreEscala y agenteB:nuncaEscala
-			if agenteB.Estrategia() == "nuncaEscala":
-				agenteA.SumarPuntos(puntosGanadosSinPelear)
-				agenteB.SumarPuntos(sinPuntosPorRetirarse)
-		
-				#print("- Resultado de contienda entre " + agenteA.Estrategia() + "-" + agenteA.AsimetriaAparente() + " localizada en (" + str(posA0) + "," + str(posA1) + ") contra " + agenteB.Estrategia()  + "-" +  agenteB.AsimetriaAparente() + " localizado en (" + str(posB0) + "," + str(posB1) + ")")
-				#print("  - Al primer jugador le sumo " + str(puntosGanadosSinPelear) + " resultado un total de " + str(agenteA.TotalDePuntos()))
-				#print("  - Al segundo jugador le sumo " + str(sinPuntosPorRetirarse) + " resultado un total de " + str(agenteB.TotalDePuntos()))
-				#print("")
-		
-			# agenteA:siempreEscala y agenteB:siempreEscala
-			if agenteB.Estrategia() == "siempreEscala":
-
-
-				# agenteA:siempreEscala y agenteB:siempreEscala
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					pr = random.random()
-					if pr < probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-
-					if pr >= self.probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
-
-
-				# agenteA:siempreEscala y agenteB:siempreEscala
-				# agenteA:chico y agenteB:chico
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "chico":
-					pr = random.random()
-					if pr < self.probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
-
-					if pr >= self.probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-
-				# agenteA:siempreEscala y agenteB:siempreEscala
-				# agenteA:chico y agenteB:grande
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "grande":
-					pr = random.random()
-					print("agenteA.unique_id" + str(agenteA.unique_id) + "probabilidad grande " + str(pr)+" probabilidad grande " + str(probabilidadDeQueElMayorGane1))
-
-					pr = random.random()
-					if pr < probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-
-					if pr >= probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
-
-				# agenteA:siempreEscala y agenteB:siempreEscala
-				# agenteA:grande y agenteB:chico
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "chico":
-					pr = random.random()
-					print("agenteA.unique_id" + str(agenteA.unique_id) + "probabilidad grande " + str(pr)+" probabilidad grande " + str(probabilidadDeQueElMayorGane1))
-
-					pr = random.random()
-					if pr < probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
-
-					if pr >= probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-
-		
-				#print("- Resultado de contienda entre " + agenteA.Estrategia() + "-" + agenteA.AsimetriaAparente() + " localizada en (" + str(posA0) + "," + str(posA1) + ") contra " + agenteB.Estrategia()  + "-" +  agenteB.AsimetriaAparente() + " localizado en (" + str(posB0) + "," + str(posB1) + ")")
-				#print("  - Al primer jugador le sumo " + str(puntosPorGanarUnaPelea) + " resultado un total de " + str(agenteA.TotalDePuntos()))
-				#print("  - Al segundo jugador le sumo " + str(costoDePerderUnaPelea) + " resultado un total de " + str(agenteB.TotalDePuntos()))
-				#print("")
-		
-			# agenteA:siempreEscala y agenteB:escalaSiElOtroEsMasGrande
-			if agenteB.Estrategia() == "escalaSiElOtroEsMasGrande":
-
-				# agenteA:siempreEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:chico y agenteB:chico
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:siempreEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:chico y agenteB:grande
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "grande":
-		
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:siempreEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:grande y agenteB:chico
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "chico":
-		
-					pr = random.random()
-					if pr <= probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
-		
-					if pr > probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-		
-				# agenteA:siempreEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-		
-		if agenteA.Estrategia() == "nuncaEscala":
-		
-			# agenteA:nuncaEscala y agenteB:nuncaEscala
-			if agenteB.Estrategia() == "nuncaEscala":
-				agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-				agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-		
-			# agenteA:nuncaEscala y agenteB:siempreEscala
-			if agenteB.Estrategia() == "siempreEscala":
-				agenteA.SumarPuntos(sinPuntosPorRetirarse)
-				agenteB.SumarPuntos(puntosGanadosSinPelear)
-		
-			# agenteA:nuncaEscala y agenteB:escalaSiElOtroEsMasGrande
-			if agenteB.Estrategia() == "escalaSiElOtroEsMasGrande":
-		
-				# agenteA:nuncaEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:chico y agenteB:chico
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-
-				# agenteA:nuncaEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:chico y agenteB:grande
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-
-				# agenteA:nuncaEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:grande y agenteB:chico
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:nuncaEscala y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-		
-		if agenteA.Estrategia() == "escalaSiElOtroEsMasGrande":
-
-			# agenteA:escalaSiElOtroEsMasGrande y agenteB:nuncaEscala
-			if agenteB.Estrategia() == "nuncaEscala":
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:nuncaEscala
-				# agenteA:chico y agenteB:chico
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:nuncaEscala
-				# agenteA:chico y agenteB:grande
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:nuncaEscala
-				# agenteA:grande y agenteB:chico
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:nuncaEscala
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-		
-			# agenteA:escalaSiElOtroEsMasGrande y agenteB:siempreEscala
-			if agenteB.Estrategia() == "siempreEscala":
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:siempreEscala
-				# agenteA:chico y agenteB:chico
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:siempreEscala
-				# agenteA:chico y agenteB:grande
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "grande":
-					pr = random.random()
-					if pr <= probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(puntosPorGanarUnaPelea)
-						agenteB.SumarPuntos(costoDePerderUnaPelea)
-		
-					if pr > probabilidadDeQueElMayorGane1:
-						agenteA.SumarPuntos(costoDePerderUnaPelea)
-						agenteB.SumarPuntos(puntosPorGanarUnaPelea)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:siempreEscala
-				# agenteA:grande y agenteB:chico
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:siempreEscala
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-		
-			# agenteA:escalaSiElOtroEsMasGrande y agenteB:escalaSiElOtroEsMasGrande
-			if agenteB.Estrategia() == "escalaSiElOtroEsMasGrande":
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:chico y agenteB:chico
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:chico y agenteB:grande
-				if agenteA.AsimetriaAparente() == "chico" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosSinPelear)
-					agenteB.SumarPuntos(sinPuntosPorRetirarse)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:grande y agenteB:chico
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "chico":
-					agenteA.SumarPuntos(sinPuntosPorRetirarse)
-					agenteB.SumarPuntos(puntosGanadosSinPelear)
-
-				# agenteA:escalaSiElOtroEsMasGrande y agenteB:escalaSiElOtroEsMasGrande
-				# agenteA:grande y agenteB:grande
-				if agenteA.AsimetriaAparente() == "grande" and agenteB.AsimetriaAparente() == "grande":
-					agenteA.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-					agenteB.SumarPuntos(puntosGanadosPorCompartirElRecurso)
-	
-		return (agenteA, agenteB)
 	
 	def run_model(self, step_count = 200):
 		a = 10

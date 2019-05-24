@@ -60,25 +60,11 @@ Distancia maxima dentro de la cual se consideran que son vecinos
 </span>
 </p>
 
-<p>
-Cantidad inicial de individuos chicos que siempre escalan
-<br>
-<input type="range" min="0" max="10" value="{{cantidadSiempreEscalaChicos}}" class="slider" id="cantidadSiempreEscalaChicos" name="cantidadSiempreEscalaChicos">
-<span id="cantidadSiempreEscalaChicosSpan">
-</span>
-</p>
 
-<p>
-Cantidad inicial de individuos grandes que siempre escalan
-<br>
-<input type="range" min="0" max="10" value="{{cantidadSiempreEscalaGrandes}}" class="slider" id="cantidadSiempreEscalaGrandes" name="cantidadSiempreEscalaGrandes">
-<span id="cantidadSiempreEscalaGrandesSpan">
-</span>
-</p>
 
 
 <p>
-Cantidad inicial de individuos chicos que escalan solo si el adversario es mas grande
+Cantidad inicial de individuos chicos que nunca escalan. Solo comparten y ceden si el otro escala
 <br>
 <input type="range" min="0" max="10" value="{{cantidadNuncaEscalaChicos}}" class="slider" id="cantidadNuncaEscalaChicos" name="cantidadNuncaEscalaChicos">
 <span id="cantidadNuncaEscalaChicosSpan">
@@ -86,7 +72,7 @@ Cantidad inicial de individuos chicos que escalan solo si el adversario es mas g
 </p>
 
 <p>
-Cantidad inicial de individuos grandes que escalan solo si el adversario es mas grande
+Cantidad inicial de individuos grandes que nunca escalan. Solo comparten y ceden si el otro escala
 <br>
 <input type="range" min="0" max="10" value="{{cantidadNuncaEscalaGrandes}}" class="slider" id="cantidadNuncaEscalaGrandes" name="cantidadNuncaEscalaGrandes">
 <span id="cantidadNuncaEscalaGrandesSpan">
@@ -94,8 +80,29 @@ Cantidad inicial de individuos grandes que escalan solo si el adversario es mas 
 </p>
 
 
+
+
+
 <p>
-Cantidad inicial de individuos chicos que nunca escalan
+Cantidad inicial de individuos chicos que siempre escalan. Nunca comparten, gana o pierde el recurso
+<br>
+<input type="range" min="0" max="10" value="{{cantidadSiempreEscalaChicos}}" class="slider" id="cantidadSiempreEscalaChicos" name="cantidadSiempreEscalaChicos">
+<span id="cantidadSiempreEscalaChicosSpan">
+</span>
+</p>
+
+<p>
+Cantidad inicial de individuos grandes que siempre escalan. Nunca comparten, gana o pierde el recurso
+<br>
+<input type="range" min="0" max="10" value="{{cantidadSiempreEscalaGrandes}}" class="slider" id="cantidadSiempreEscalaGrandes" name="cantidadSiempreEscalaGrandes">
+<span id="cantidadSiempreEscalaGrandesSpan">
+</span>
+</p>
+
+
+
+<p>
+Cantidad inicial de individuos chicos que escalan solo si el adversario es mas grande
 <br>
 <input type="range" min="0" max="10" value="{{cantidadEscalaSiElOtroEsMasGrandeChicos}}" class="slider" id="cantidadEscalaSiElOtroEsMasGrandeChicos" name="cantidadEscalaSiElOtroEsMasGrandeChicos">
 <span id="cantidadEscalaSiElOtroEsMasGrandeChicosSpan">
@@ -103,15 +110,41 @@ Cantidad inicial de individuos chicos que nunca escalan
 </p>
 
 <p>
-Cantidad inicial de individuos grandes que nunca escalan
+Cantidad inicial de individuos grandes que escalan solo si el adversario es mas grande
 <br>
 <input type="range" min="0" max="10" value="{{cantidadEscalaSiElOtroEsMasGrandeGrandes}}" class="slider" id="cantidadEscalaSiElOtroEsMasGrandeGrandes" name="cantidadEscalaSiElOtroEsMasGrandeGrandes">
 <span id="cantidadEscalaSiElOtroEsMasGrandeGrandesSpan">
 </span>
 </p>
 
+
+
+
+
 <p>
-Valor de un recurso
+Cantidad inicial de individuos chicos que escalan solo si el adversario es mas chico
+<br>
+<input type="range" min="0" max="10" value="{{cantidadEscalaSiElOtroEsMasChicoChicos}}" class="slider" id="cantidadEscalaSiElOtroEsMasChicoChicos" name="cantidadEscalaSiElOtroEsMasChicoChicos">
+<span id="cantidadEscalaSiElOtroEsMasChicoChicosSpan">
+</span>
+</p>
+
+<p>
+Cantidad inicial de individuos grandes que escalan solo si el adversario es mas chico
+<br>
+<input type="range" min="0" max="10" value="{{cantidadEscalaSiElOtroEsMasChicoGrandes}}" class="slider" id="cantidadEscalaSiElOtroEsMasChicoGrandes" name="cantidadEscalaSiElOtroEsMasChicoGrandes">
+<span id="cantidadEscalaSiElOtroEsMasChicoGrandesSpan">
+</span>
+</p>
+
+
+
+
+
+
+
+<p>
+Valor de un recurso. El ganador de un combate se queda con todo el recurso, si se comparte es mitad para cada uno
 <br>
 <input type="range" min="0" max="10" value="{{valorDelRecurso}}" class="slider" id="valorDelRecurso" name="valorDelRecurso">
 <span id="valorDelRecursoSpan">
@@ -119,7 +152,7 @@ Valor de un recurso
 </p>
 
 <p>
-Costo de una lesion
+Costo de una lesion. Solo el perdedor de un combate paga el costo
 <br>
 <input type="range" min="0" max="10" value="{{costoDeLesion}}" class="slider" id="costoDeLesion" name="costoDeLesion">
 <span id="costoDeLesionSpan">
@@ -127,7 +160,7 @@ Costo de una lesion
 </p>
 
 <p>
-Probabilidad de que el mayor gane
+Porcentaje de veces que el mas grande gana un combate. Si los individuos tienen el mismo tamano la mitad de las veces gana uno y la otra mitad gana el otro.
 <br>
 <input type="range" min="0" max="100" value="{{probabilidadDeQueElMayorGane}}" class="slider" id="probabilidadDeQueElMayorGane" name="probabilidadDeQueElMayorGane">
 <span id="probabilidadDeQueElMayorGaneSpan">
@@ -231,6 +264,37 @@ cantidadEscalaSiElOtroEsMasGrandeGrandesoutput.innerHTML = cantidadEscalaSiElOtr
 cantidadEscalaSiElOtroEsMasGrandeGrandesslider.oninput = function() {
   cantidadEscalaSiElOtroEsMasGrandeGrandesoutput.innerHTML = this.value;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+var cantidadEscalaSiElOtroEsMasChicoChicosslider = document.getElementById("cantidadEscalaSiElOtroEsMasChicoChicos");
+var cantidadEscalaSiElOtroEsMasChicoChicosoutput = document.getElementById("cantidadEscalaSiElOtroEsMasChicoChicosSpan");
+cantidadEscalaSiElOtroEsMasChicoChicosoutput.innerHTML = cantidadEscalaSiElOtroEsMasChicoChicosslider.value;
+
+cantidadEscalaSiElOtroEsMasChicoChicosslider.oninput = function() {
+  cantidadEscalaSiElOtroEsMasChicoChicosoutput.innerHTML = this.value;
+}
+
+var cantidadEscalaSiElOtroEsMasChicoGrandesslider = document.getElementById("cantidadEscalaSiElOtroEsMasChicoGrandes");
+var cantidadEscalaSiElOtroEsMasChicoGrandesoutput = document.getElementById("cantidadEscalaSiElOtroEsMasChicoGrandesSpan");
+cantidadEscalaSiElOtroEsMasChicoGrandesoutput.innerHTML = cantidadEscalaSiElOtroEsMasChicoGrandesslider.value;
+
+cantidadEscalaSiElOtroEsMasChicoGrandesslider.oninput = function() {
+  cantidadEscalaSiElOtroEsMasChicoGrandesoutput.innerHTML = this.value;
+}
+
+
+
+
 
 
 var valorDelRecursoslider = document.getElementById("valorDelRecurso");
