@@ -47,13 +47,13 @@ class HistogramModule(VisualizationElement):
         #hist = np.histogram(wealth_vals, bins=self.bins)[0]
         #return [int(x) for x in hist]    
 
-        porcentajeDeHalconesGrande = model.schedule.porcentajeDeJugadores("siempreEscala", "grande")
-
-        porcentajeDeHalconesChico = model.schedule.porcentajeDeJugadores("siempreEscala", "chico")
-
         porcentajeDePalomasGrande = model.schedule.porcentajeDeJugadores("nuncaEscala", "grande")
 
         porcentajeDePalomasChico = model.schedule.porcentajeDeJugadores("nuncaEscala", "chico")
+
+        porcentajeDeHalconesGrande = model.schedule.porcentajeDeJugadores("siempreEscala", "grande")
+
+        porcentajeDeHalconesChico = model.schedule.porcentajeDeJugadores("siempreEscala", "chico")
 
         porcentajeDeParadojicosGrande = model.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasGrande", "grande")
         
@@ -63,7 +63,7 @@ class HistogramModule(VisualizationElement):
         
         porcentajeDeSentidoComunChico = model.schedule.porcentajeDeJugadores("escalaSiElOtroEsMasChico", "chico")
 
-        return [porcentajeDeHalconesGrande, porcentajeDeHalconesChico, porcentajeDePalomasGrande, porcentajeDePalomasChico, porcentajeDeParadojicosGrande, porcentajeDeParadojicosChico, porcentajeDeSentidoComunGrande, porcentajeDeSentidoComunChico]
+        return [porcentajeDePalomasGrande, porcentajeDePalomasChico, porcentajeDeHalconesGrande, porcentajeDeHalconesChico, porcentajeDeParadojicosGrande, porcentajeDeParadojicosChico, porcentajeDeSentidoComunGrande, porcentajeDeSentidoComunChico]
 
 def personalizacionDelAmbiente(agent):
     if agent is None:
@@ -169,15 +169,15 @@ model_params = {
                 "distanciaMaximaVecinos": UserSettableParameter('slider', 'Distancia dentro de la cual se consideran adversarios', 20, 1, 20),
                 "cantidadDePalomasChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10), 
                 "cantidadDePalomasGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10), 
-                "cantidadDeHalconesChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan. Nunca comparten, gana o pierde el recurso', 1, 0, 10),
-                "cantidadDeHalconesGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan. Nunca comparten, gana o pierde el recurso', 1, 0, 10),
+                "cantidadDeHalconesChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan. Nunca comparten, gana o pierde el recurso', 0, 0, 10),
+                "cantidadDeHalconesGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan. Nunca comparten, gana o pierde el recurso', 0, 0, 10),
                 "cantidadDeParadojicosChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas grande', 6, 0, 10),
                 "cantidadDeParadojicosGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas grande', 6, 0, 10),
-                "cantidadDeSentidoComunChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas chico', 6, 0, 10),
-                "cantidadDeSentidoComunGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas chico', 6, 0, 10),
+                "cantidadDeSentidoComunChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas chico', 0, 0, 10),
+                "cantidadDeSentidoComunGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas chico', 1, 0, 10),
                 "valorDelRecurso": UserSettableParameter('slider', 'Valor de un recurso. El ganador de un combate se queda con todo el recurso, si se comparte es mitad para cada uno', 1, 0, 10), 
-                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion. Solo el perdedor de un combate paga el costo', 2, 0, 10), 
-                "porcentajeDeQueElMayorGane": UserSettableParameter('slider', 'Porcentaje de veces que el mas grande gana un combate. Si los individuos tienen el mismo tama&#xF1;o la mitad de las veces gana uno y la otra mitad gana el otro.', 100, 0, 100), 
+                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion. Solo el perdedor de un combate paga el costo', 9, 0, 10), 
+                "porcentajeDeQueElMayorGane": UserSettableParameter('slider', 'Porcentaje de veces que el mas grande gana un combate. Si los individuos tienen el mismo tama&#xF1;o la mitad de las veces gana uno y la otra mitad gana el otro.', 80, 0, 100), 
                 "edadDeReproduccion": UserSettableParameter('slider', 'Paso en que se produce la reproduccion y mueren', 5, 0, 1000) 
                 }
 

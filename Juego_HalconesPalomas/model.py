@@ -33,14 +33,16 @@ class Ambiente(Model):
 		alto = 20,
 		ancho = 20,
 		distanciaMaximaVecinos = 20, 
+
+		cantidadDePalomasChicos = 0,
+		cantidadDePalomasGrandes = 0,
 		cantidadDeHalconesChicos = 2,
 		cantidadDeHalconesGrandes = 2,
 		cantidadDeParadojicosChicos = 0,
 		cantidadDeParadojicosGrandes = 0,
 		cantidadDeSentidoComunChicos = 0,
 		cantidadDeSentidoComunGrandes = 0,
-		cantidadDePalomasChicos = 0,
-		cantidadDePalomasGrandes = 0,
+
 		valorDelRecurso = 1,
 		costeDeLesion = 0,
 		porcentajeDeQueElMayorGane = 50, 
@@ -101,7 +103,6 @@ class Ambiente(Model):
 			estrategia = "siempreEscala"
 			
 			localia = None
-			#asimetriaAparente = "grande"
 			asimetriaAparente = "chico"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
@@ -139,7 +140,7 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "nuncaEscala"
 			localia = None
-			asimetriaAparente = "grande"
+			asimetriaAparente = "chico"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
@@ -156,8 +157,7 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "nuncaEscala"
 			localia = None
-			#asimetriaAparente = "grande"
-			asimetriaAparente = "chico"
+			asimetriaAparente = "grande"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
@@ -175,7 +175,7 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "escalaSiElOtroEsMasGrande"
 			localia = None
-			asimetriaAparente = "grande"
+			asimetriaAparente = "chico"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
@@ -192,7 +192,7 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "escalaSiElOtroEsMasGrande"
 			localia = None
-			asimetriaAparente = "chico"
+			asimetriaAparente = "grande"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
@@ -210,7 +210,7 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "escalaSiElOtroEsMasChico"
 			localia = None
-			asimetriaAparente = "grande"
+			asimetriaAparente = "chico"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))
@@ -227,7 +227,7 @@ class Ambiente(Model):
 			id = self.next_id()
 			estrategia = "escalaSiElOtroEsMasChico"
 			localia = None
-			asimetriaAparente = "chico"
+			asimetriaAparente = "grande"
 			pos = (x, y)
 			jugador1 = Jugadores(id, pos, estrategia, asimetriaAparente, self)
 			self.grid.place_agent(jugador1, (x, y))

@@ -7,10 +7,10 @@
 		    var context = canvas.getContext("2d");
 
 		bins = [
-			"SiempreEscala Grande",
-			"SiempreEscala Chico",
 			"NuncaEscala Grande",
 			"NuncaEscala Chico",
+			"SiempreEscala Grande",
+			"SiempreEscala Chico",
 			"EscalaSiElOtroEsMasGrande Grande",
 			"EscalaSiElOtroEsMasGrande Chico",
 			"EscalaSiElOtroEsMasChico Grande",

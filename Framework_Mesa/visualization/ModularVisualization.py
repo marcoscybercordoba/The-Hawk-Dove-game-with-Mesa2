@@ -178,50 +178,64 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 	def get(self):
 
 		distanciaMaximaVecinos = 20
-		cantidadSiempreEscalaChicosInicial = 2
-		cantidadSiempreEscalaGrandesInicial = 2
+
 		cantidadNuncaEscalaChicosInicial = 0
 		cantidadNuncaEscalaGrandesInicial = 0
-		cantidadEscalaSiElOtroEsMasGrandeChicosInicial = 0
-		cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = 0
+		cantidadSiempreEscalaChicosInicial = 0
+		cantidadSiempreEscalaGrandesInicial = 0
+		cantidadEscalaSiElOtroEsMasGrandeChicosInicial = 4
+		cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = 4
 		cantidadEscalaSiElOtroEsMasChicoChicosInicial = 0
-		cantidadEscalaSiElOtroEsMasChicoGrandesInicial = 0
+		cantidadEscalaSiElOtroEsMasChicoGrandesInicial = 1
+
+
+		cantidadSiempreEscalaGrandes = cantidadSiempreEscalaGrandesInicial
+		cantidadSiempreEscalaChicos = cantidadSiempreEscalaChicosInicial
+		cantidadNuncaEscalaGrandes = cantidadNuncaEscalaGrandesInicial
+		cantidadNuncaEscalaChicos = cantidadNuncaEscalaChicosInicial
+		cantidadEscalaSiElOtroEsMasGrandeGrandes = cantidadEscalaSiElOtroEsMasGrandeGrandesInicial
+		cantidadEscalaSiElOtroEsMasGrandeChicos = cantidadEscalaSiElOtroEsMasGrandeChicosInicial
+		cantidadEscalaSiElOtroEsMasChicoGrandes = cantidadEscalaSiElOtroEsMasChicoGrandesInicial
+		cantidadEscalaSiElOtroEsMasChicoChicos = cantidadEscalaSiElOtroEsMasChicoChicosInicial
+
+
+
 		valorDelRecurso = 1
-		costoDeLesion = 0
-		probabilidadDeQueElMayorGane = 50
+		costoDeLesion = 9
+		probabilidadDeQueElMayorGane = 80
 		edadDeReproduccion = 5
-		cantidadDeSimulaciones = 2
-		cantidadDePasos = 30
+		cantidadDeSimulaciones = 1
+		cantidadDePasos = 10
 
 		if self.get_argument('distanciaMaximaVecinos', None) != None:
 			distanciaMaximaVecinos = int(self.get_argument('distanciaMaximaVecinos', None))
 
 
-		if self.get_argument('cantidadSiempreEscalaChicos', None) != None:
-			cantidadSiempreEscalaChicosInicial = int(self.get_argument('cantidadSiempreEscalaChicos', None))
+		if self.get_argument('cantidadSiempreEscalaChicosInicial', None) != None:
+			cantidadSiempreEscalaChicosInicial = int(self.get_argument('cantidadSiempreEscalaChicosInicial', None))
 
-		if self.get_argument('cantidadSiempreEscalaGrandes', None) != None:
-			cantidadSiempreEscalaGrandesInicial = int(self.get_argument('cantidadSiempreEscalaGrandes', None))
+		if self.get_argument('cantidadSiempreEscalaGrandesInicial', None) != None:
+			cantidadSiempreEscalaGrandesInicial = int(self.get_argument('cantidadSiempreEscalaGrandesInicial', None))
 
-		if self.get_argument('cantidadNuncaEscalaChicos', None) != None:
-			cantidadNuncaEscalaChicosInicial = int(self.get_argument('cantidadNuncaEscalaChicos', None))
+		if self.get_argument('cantidadNuncaEscalaChicosInicial', None) != None:
+			cantidadNuncaEscalaChicosInicial = int(self.get_argument('cantidadNuncaEscalaChicosInicial', None))
 
-		if self.get_argument('cantidadNuncaEscalaGrandes', None) != None:
-			cantidadNuncaEscalaGrandesInicial = int(self.get_argument('cantidadNuncaEscalaGrandes', None))
+		if self.get_argument('cantidadNuncaEscalaGrandesInicial', None) != None:
+			cantidadNuncaEscalaGrandesInicial = int(self.get_argument('cantidadNuncaEscalaGrandesInicial', None))
 
-		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None) != None:
-			cantidadEscalaSiElOtroEsMasGrandeChicosInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicos', None))
+		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicosInicial', None) != None:
+			cantidadEscalaSiElOtroEsMasGrandeChicosInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeChicosInicial', None))
 
-		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None) != None:
-			cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandes', None))
+		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandesInicial', None) != None:
+			cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandesInicial', None))
 
 
 
-		if self.get_argument('cantidadEscalaSiElOtroEsMasChicoChicos', None) != None:
-			cantidadEscalaSiElOtroEsMasChicoChicosInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasChicoChicos', None))
+		if self.get_argument('cantidadEscalaSiElOtroEsMasChicoChicosInicial', None) != None:
+			cantidadEscalaSiElOtroEsMasChicoChicosInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasChicoChicosInicial', None))
 
-		if self.get_argument('cantidadEscalaSiElOtroEsMasChicoGrandes', None) != None:
-			cantidadEscalaSiElOtroEsMasChicoGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasChicoGrandes', None))
+		if self.get_argument('cantidadEscalaSiElOtroEsMasChicoGrandesInicial', None) != None:
+			cantidadEscalaSiElOtroEsMasChicoGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasChicoGrandesInicial', None))
 
 
 
@@ -277,14 +291,14 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 				alto,
 				ancho,
 				distanciaMaximaVecinos, 
+				cantidadNuncaEscalaChicos,
+				cantidadNuncaEscalaGrandes,
 				cantidadSiempreEscalaChicos,
 				cantidadSiempreEscalaGrandes,
 				cantidadEscalaSiElOtroEsMasGrandeChicos,
 				cantidadEscalaSiElOtroEsMasGrandeGrandes,
 				cantidadEscalaSiElOtroEsMasChicoChicos,
 				cantidadEscalaSiElOtroEsMasChicoGrandes,
-				cantidadNuncaEscalaChicos,
-				cantidadNuncaEscalaGrandes,
 				valorDelRecurso,
 				costoDeLesion,
 				probabilidadDeQueElMayorGane,
@@ -354,7 +368,7 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 
 		porcentajesStr = porcentajesStr + "<tr><td> - </td><td>" + str(cantidadNuncaEscalaChicosMedia) + "</td><td>" + str(cantidadNuncaEscalaGrandesMedia) + "</td><td>" +str(cantidadSiempreEscalaChicosMedia) + "</td><td>" + str(cantidadSiempreEscalaGrandesMedia) + "</td><td>" +  str(cantidadEscalaSiElOtroEsMasGrandeChicosMedia) + "</td><td>" + str(cantidadEscalaSiElOtroEsMasGrandeGrandesMedia) + "</td><td>" +  str(cantidadEscalaSiElOtroEsMasChicoChicosMedia) + "</td><td>" + str(cantidadEscalaSiElOtroEsMasChicoGrandesMedia) +"</td></table>"
 
-		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distanciaMaximaVecinos=distanciaMaximaVecinos, cantidadSiempreEscalaChicos=cantidadSiempreEscalaChicos, cantidadSiempreEscalaGrandes=cantidadSiempreEscalaGrandes, cantidadNuncaEscalaChicos=cantidadNuncaEscalaChicos, cantidadNuncaEscalaGrandes=cantidadNuncaEscalaGrandes, cantidadEscalaSiElOtroEsMasGrandeChicos=cantidadEscalaSiElOtroEsMasGrandeChicos, cantidadEscalaSiElOtroEsMasGrandeGrandes=cantidadEscalaSiElOtroEsMasGrandeGrandes, cantidadEscalaSiElOtroEsMasChicoChicos=cantidadEscalaSiElOtroEsMasChicoChicos, cantidadEscalaSiElOtroEsMasChicoGrandes=cantidadEscalaSiElOtroEsMasChicoGrandes, valorDelRecurso=valorDelRecurso, costoDeLesion=costoDeLesion, probabilidadDeQueElMayorGane = probabilidadDeQueElMayorGane, edadDeReproduccion=edadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
+		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distanciaMaximaVecinos=distanciaMaximaVecinos, cantidadSiempreEscalaChicosInicial=cantidadSiempreEscalaChicosInicial, cantidadSiempreEscalaGrandesInicial=cantidadSiempreEscalaGrandesInicial, cantidadNuncaEscalaChicosInicial=cantidadNuncaEscalaChicosInicial, cantidadNuncaEscalaGrandesInicial=cantidadNuncaEscalaGrandesInicial, cantidadEscalaSiElOtroEsMasGrandeChicosInicial=cantidadEscalaSiElOtroEsMasGrandeChicosInicial, cantidadEscalaSiElOtroEsMasGrandeGrandesInicial=cantidadEscalaSiElOtroEsMasGrandeGrandesInicial, cantidadEscalaSiElOtroEsMasChicoChicosInicial=cantidadEscalaSiElOtroEsMasChicoChicosInicial, cantidadEscalaSiElOtroEsMasChicoGrandesInicial=cantidadEscalaSiElOtroEsMasChicoGrandesInicial, valorDelRecurso=valorDelRecurso, costoDeLesion=costoDeLesion, probabilidadDeQueElMayorGane = probabilidadDeQueElMayorGane, edadDeReproduccion=edadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
 
 
 
