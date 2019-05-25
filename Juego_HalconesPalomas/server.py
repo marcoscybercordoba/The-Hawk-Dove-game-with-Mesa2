@@ -165,21 +165,20 @@ chart_element = ChartModule([{"Label": "SiempreEscala_Grande", "Color": "#08088A
 
 
 
-model_params = {
-                "distanciaMaximaVecinos": UserSettableParameter('slider', 'Distancia dentro de la cual se consideran adversarios', 20, 1, 20),
-                "cantidadDePalomasChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10), 
-                "cantidadDePalomasGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10), 
-                "cantidadDeHalconesChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan. Nunca comparten, gana o pierde el recurso', 0, 0, 10),
-                "cantidadDeHalconesGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan. Nunca comparten, gana o pierde el recurso', 0, 0, 10),
-                "cantidadDeParadojicosChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas grande', 6, 0, 10),
-                "cantidadDeParadojicosGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas grande', 6, 0, 10),
-                "cantidadDeSentidoComunChicos": UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas chico', 0, 0, 10),
-                "cantidadDeSentidoComunGrandes": UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas chico', 1, 0, 10),
-                "valorDelRecurso": UserSettableParameter('slider', 'Valor de un recurso. El ganador de un combate se queda con todo el recurso, si se comparte es mitad para cada uno', 1, 0, 10), 
-                "costeDeLesion": UserSettableParameter('slider', 'Costo de una lesion. Solo el perdedor de un combate paga el costo', 9, 0, 10), 
-                "porcentajeDeQueElMayorGane": UserSettableParameter('slider', 'Porcentaje de veces que el mas grande gana un combate. Si los individuos tienen el mismo tama&#xF1;o la mitad de las veces gana uno y la otra mitad gana el otro.', 80, 0, 100), 
-                "edadDeReproduccion": UserSettableParameter('slider', 'Paso en que se produce la reproduccion y mueren', 5, 0, 1000) 
-                }
+distanciaMaximaVecinos= UserSettableParameter('slider', 'Distancia dentro de la cual se consideran adversarios', 20, 1, 20)
+cantidadDePalomasChicos= UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10) 
+cantidadDePalomasGrandes= UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que nunca escalan. Solo comparten y ceden si el otro escala', 0, 0, 10) 
+cantidadDeHalconesChicos= UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que siempren escalan. Nunca comparten, gana o pierde el recurso', 0, 0, 10)
+cantidadDeHalconesGrandes= UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que siempren escalan. Nunca comparten, gana o pierde el recurso', 0, 0, 10)
+cantidadDeParadojicosChicos= UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas grande', 6, 0, 10)
+cantidadDeParadojicosGrandes= UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas grande', 6, 0, 10)
+cantidadDeSentidoComunChicos= UserSettableParameter('slider', 'Cantidad inicial de individuos chicos que escalan solo si el adversario es mas chico', 0, 0, 10)
+cantidadDeSentidoComunGrandes= UserSettableParameter('slider', 'Cantidad inicial de individuos grandes que escalan solo si el adversario es mas chico', 1, 0, 10)
+valorDelRecurso= UserSettableParameter('slider', 'Valor de un recurso. El ganador de un combate se queda con todo el recurso, si se comparte es mitad para cada uno', 1, 0, 10) 
+costeDeLesion= UserSettableParameter('slider', 'Costo de una lesion. Solo el perdedor de un combate paga el costo', 9, 0, 10) 
+porcentajeDeQueElMayorGane= UserSettableParameter('slider', 'Porcentaje de veces que el mas grande gana un combate. Si los individuos tienen el mismo tama&#xF1;o la mitad de las veces gana uno y la otra mitad gana el otro.', 80, 0, 100) 
+edadDeReproduccion= UserSettableParameter('slider', 'Paso en que se produce la reproduccion y mueren', 5, 0, 1000)
+
 
 
 histogram = HistogramModule(list(range(10)), 200, 500)
@@ -198,7 +197,22 @@ histogram = HistogramModule(list(range(10)), 200, 500)
 # Estrategia condicional paradojica
 # Pagina 92
 
-server = ModularServer(Ambiente, [canvas_element, chart_element, histogram], "Machos galanteadores y fieles. Hembras faciles y esquivas", model_params)
+
+server = ModularServer(Ambiente, [canvas_element, chart_element, histogram], "Machos galanteadores y fieles. Hembras faciles y esquivas", 
+		{"distanciaMaximaVecinos": distanciaMaximaVecinos,
+		"cantidadDePalomasChicos": cantidadDePalomasChicos,
+		"cantidadDePalomasGrandes": cantidadDePalomasGrandes,
+		"cantidadDeHalconesChicos": cantidadDeHalconesChicos,
+		"cantidadDeHalconesGrandes": cantidadDeHalconesGrandes,
+		"cantidadDeParadojicosChicos": cantidadDeParadojicosChicos,
+		"cantidadDeParadojicosGrandes": cantidadDeParadojicosGrandes,
+		"cantidadDeSentidoComunChicos": cantidadDeSentidoComunChicos,
+		"cantidadDeSentidoComunGrandes": cantidadDeSentidoComunGrandes,
+		"valorDelRecurso": valorDelRecurso,
+		"costeDeLesion": costeDeLesion,
+		"porcentajeDeQueElMayorGane": porcentajeDeQueElMayorGane,
+		"edadDeReproduccion": edadDeReproduccion})
+
 
 #server.port = 8257
 server.port = int(os.environ.get("PORT", 5000))

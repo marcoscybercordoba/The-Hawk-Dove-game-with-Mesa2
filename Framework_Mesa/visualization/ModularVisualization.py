@@ -1,27 +1,25 @@
+from Framework_Mesa.visualization.UserParam import UserSettableParameter
 
 from Juego_HalconesPalomas.agentes import Jugadores
 from Juego_HalconesPalomas.model import Ambiente
 
 import os.path
-
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-
 import os
 import random
 import numpy as np
 
-import os
-import tornado.httpserver
-import tornado.ioloop
-import tornado.web
-
-
-
+import tornado.autoreload
+import tornado.websocket
+import tornado.escape
+import tornado.gen
+import webbrowser
 
 # -*- coding: utf-8 -*-
+
 """
 ModularServer
 =============
@@ -119,60 +117,30 @@ Client -> Server:
     }
 
 """
-import os
-import tornado.autoreload
-import tornado.ioloop
-import tornado.web
-import tornado.websocket
-import tornado.escape
-import tornado.gen
-import webbrowser
-
-from Framework_Mesa.visualization.UserParam import UserSettableParameter
 
 # Suppress several pylint warnings for this file.
 # Attributes being defined outside of init is a Tornado feature.
 # pylint: disable=attribute-defined-outside-init
 
 
-class VisualizationElement:
-    """
-    Defines an element of the visualization.
+class HomePage(tornado.web.RequestHandler):
+	def get(self):
+		#self.write("Hello world")
+		self.render('homePage.html')
 
-    Attributes:
-        package_includes: A list of external JavaScript files to include that
-                          are part of the Mesa packages.
-        local_includes: A list of JavaScript files that are local to the
-                        directory that the server is being run in.
-        js_code: A JavaScript code string to instantiate the element.
+class RealizaUnaSimulacionMuestraEvolucion(tornado.web.RequestHandler):
+	""" Handler for the HTML template which holds the visualization. """
+	def get(self):
 
-    Methods:
-        render: Takes a model object, and produces JSON data which can be sent
-                to the client.
-
-    """
-
-    package_includes = []
-    local_includes = []
-    js_code = ''
-    render_args = {}
-
-    def __init__(self):
-        pass
-
-    def render(self, model):
-        """ Build visualization data from a model object.
-
-        Args:
-            model: A model object
-
-        Returns:
-            A JSON-ready object.
-
-        """
-        return "<b>VisualizationElement goes here</b>."
-
-# =============================================================================
+		elements = self.application.visualization_elements
+		for i, element in enumerate(elements):
+			element.index = i
+		self.render("realizaUnaSimulacionMuestraEvolucion.html", port=self.application.port,
+		            model_name=self.application.model_name,
+		            description=self.application.description,
+		            package_includes=self.application.package_includes,
+		            local_includes=self.application.local_includes,
+		            scripts=self.application.js_code)
 
 class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 	def get(self):
@@ -188,7 +156,6 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		cantidadEscalaSiElOtroEsMasChicoChicosInicial = 0
 		cantidadEscalaSiElOtroEsMasChicoGrandesInicial = 1
 
-
 		cantidadSiempreEscalaGrandes = cantidadSiempreEscalaGrandesInicial
 		cantidadSiempreEscalaChicos = cantidadSiempreEscalaChicosInicial
 		cantidadNuncaEscalaGrandes = cantidadNuncaEscalaGrandesInicial
@@ -197,8 +164,6 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		cantidadEscalaSiElOtroEsMasGrandeChicos = cantidadEscalaSiElOtroEsMasGrandeChicosInicial
 		cantidadEscalaSiElOtroEsMasChicoGrandes = cantidadEscalaSiElOtroEsMasChicoGrandesInicial
 		cantidadEscalaSiElOtroEsMasChicoChicos = cantidadEscalaSiElOtroEsMasChicoChicosInicial
-
-
 
 		valorDelRecurso = 1
 		costoDeLesion = 9
@@ -229,19 +194,14 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 		if self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandesInicial', None) != None:
 			cantidadEscalaSiElOtroEsMasGrandeGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasGrandeGrandesInicial', None))
 
-
-
 		if self.get_argument('cantidadEscalaSiElOtroEsMasChicoChicosInicial', None) != None:
 			cantidadEscalaSiElOtroEsMasChicoChicosInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasChicoChicosInicial', None))
 
 		if self.get_argument('cantidadEscalaSiElOtroEsMasChicoGrandesInicial', None) != None:
 			cantidadEscalaSiElOtroEsMasChicoGrandesInicial = int(self.get_argument('cantidadEscalaSiElOtroEsMasChicoGrandesInicial', None))
 
-
-
 		if self.get_argument('valorDelRecurso', None) != None:
 			valorDelRecurso = int(self.get_argument('valorDelRecurso', None))
-
 
 		if self.get_argument('costoDeLesion', None) != None:
 			costoDeLesion = int(self.get_argument('costoDeLesion', None))
@@ -304,11 +264,9 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 				probabilidadDeQueElMayorGane,
 				edadDeReproduccion
 				)	
-
 		
 			porcentajesStr = porcentajesStr + "<b>Simulacion: "+ str(i+1) + "</b><br>"
 			porcentajesStr = porcentajesStr + "<br><table border='1'><tr><i><td>Paso </td><td>Chico_NuncaEscala</td><td>Grande_NuncaEscala</td><td>Chico_SiempreEscala</td><td>Grande_SiempreEscala</td><td>Chico_EscalaSoloSiElOtroEsMasGrande</td><td>Grande_EscalaSoloSiElOtroEsMasGrande</td><td>Chico_EscalaSoloSiElOtroEsMasChico</td><td>Grande_EscalaSoloSiElOtroEsMasChico</td></i></tr>"
-
 		
 			for j in range(int(cantidadDePasos)):
 				ambiente.step()
@@ -370,35 +328,45 @@ class RealizaVariasSimulacionesCalculaEstadisticos(tornado.web.RequestHandler):
 
 		self.render('realizaVariasSimulacionesCalculaEstadisticos.html', porcentajesStr2=porcentajesStr, distanciaMaximaVecinos=distanciaMaximaVecinos, cantidadSiempreEscalaChicosInicial=cantidadSiempreEscalaChicosInicial, cantidadSiempreEscalaGrandesInicial=cantidadSiempreEscalaGrandesInicial, cantidadNuncaEscalaChicosInicial=cantidadNuncaEscalaChicosInicial, cantidadNuncaEscalaGrandesInicial=cantidadNuncaEscalaGrandesInicial, cantidadEscalaSiElOtroEsMasGrandeChicosInicial=cantidadEscalaSiElOtroEsMasGrandeChicosInicial, cantidadEscalaSiElOtroEsMasGrandeGrandesInicial=cantidadEscalaSiElOtroEsMasGrandeGrandesInicial, cantidadEscalaSiElOtroEsMasChicoChicosInicial=cantidadEscalaSiElOtroEsMasChicoChicosInicial, cantidadEscalaSiElOtroEsMasChicoGrandesInicial=cantidadEscalaSiElOtroEsMasChicoGrandesInicial, valorDelRecurso=valorDelRecurso, costoDeLesion=costoDeLesion, probabilidadDeQueElMayorGane = probabilidadDeQueElMayorGane, edadDeReproduccion=edadDeReproduccion, CantidadDeSimulaciones = cantidadDeSimulaciones, CantidadDePasos = cantidadDePasos)
 
+class VisualizationElement:
+    """
+    Defines an element of the visualization.
 
+    Attributes:
+        package_includes: A list of external JavaScript files to include that
+                          are part of the Mesa packages.
+        local_includes: A list of JavaScript files that are local to the
+                        directory that the server is being run in.
+        js_code: A JavaScript code string to instantiate the element.
 
-class HomePage(tornado.web.RequestHandler):
-	def get(self):
-		#self.write("Hello world")
-		self.render('homePage.html')
+    Methods:
+        render: Takes a model object, and produces JSON data which can be sent
+                to the client.
 
+    """
 
+    package_includes = []
+    local_includes = []
+    js_code = ''
+    render_args = {}
 
+    def __init__(self):
+        pass
 
+    def render(self, model):
+        """ Build visualization data from a model object.
 
-class RealizaUnaSimulacionMuestraEvolucion(tornado.web.RequestHandler):
-	""" Handler for the HTML template which holds the visualization. """
-	def get(self):
+        Args:
+            model: A model object
 
-		elements = self.application.visualization_elements
-		for i, element in enumerate(elements):
-			element.index = i
-		self.render("realizaUnaSimulacionMuestraEvolucion.html", port=self.application.port,
-		            model_name=self.application.model_name,
-		            description=self.application.description,
-		            package_includes=self.application.package_includes,
-		            local_includes=self.application.local_includes,
-		            scripts=self.application.js_code)
-	
-	
-	
-	
-	
+        Returns:
+            A JSON-ready object.
+
+        """
+        return "<b>VisualizationElement goes here</b>."
+
+# =============================================================================
+
 class SocketHandler(tornado.websocket.WebSocketHandler):
     """ Handler for websocket. """
     def open(self):

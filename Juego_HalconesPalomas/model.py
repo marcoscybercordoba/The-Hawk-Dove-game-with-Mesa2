@@ -51,7 +51,7 @@ class Ambiente(Model):
 		
 		super().__init__()
 		self.paso = 1
-		
+
 		self.epoca = 1
 		
 		self.minGlobal = None
